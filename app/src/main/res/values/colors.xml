@@ -6,4 +6,6 @@
     <color name="facebookBlue">#4267B2</color>
     <color name="instagramPink">#C13584</color>
     <color name="instagramYellow">#FFDC80</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
 </resources>
