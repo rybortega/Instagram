@@ -8,13 +8,13 @@
         android:title="HOME"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_schedules"
+        android:id="@+id/miCompose"
         android:enabled="true"
         android:icon="@drawable/instagram_new_post_outline_24"
         android:title="NEW POST"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_music"
+        android:id="@+id/miProfile"
         android:enabled="true"
         android:icon="@drawable/instagram_user_outline_24"
         android:title="MY PROFILE"
