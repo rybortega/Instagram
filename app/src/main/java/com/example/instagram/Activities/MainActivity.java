@@ -2,12 +2,12 @@ package com.example.instagram.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.Toolbar;
 
 import com.example.instagram.R;
 import com.example.instagram.databinding.ActivityMainBinding;
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                         goMainActivity();
                         return true;
                     case R.id.miCompose:
-                        goComposeActivity();
+                        goCameraActivity();
                         return true;
                     case R.id.miProfile:
                         goProfileActivity();
@@ -60,11 +60,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, MainActivity.class));
     }
 
-    private void goComposeActivity() {
-        startActivity(new Intent(MainActivity.this, ComposeActivity.class));
+    private void goCameraActivity() {
+        startActivity(new Intent(MainActivity.this, CameraActivity.class));
     }
 
     private void goProfileActivity() {
         startActivity(new Intent(MainActivity.this, ProfileActivity.class));
     }
+
 }
