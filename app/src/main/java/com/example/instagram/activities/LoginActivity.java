@@ -1,4 +1,4 @@
-package com.example.instagram.Activities;
+package com.example.instagram.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 

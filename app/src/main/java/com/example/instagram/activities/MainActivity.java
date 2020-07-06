@@ -1,4 +1,4 @@
-package com.example.instagram.Activities;
+package com.example.instagram.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,19 +6,28 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.example.instagram.R;
 import com.example.instagram.databinding.ActivityMainBinding;
+import com.example.instagram.models.Post;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
     private BottomNavigationView bottomNavigationView;
     private Toolbar tbMenu;
     private ImageView ivCompose;
     private ImageView ivDirect;
+    private List<Post> posts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +37,23 @@ public class MainActivity extends AppCompatActivity {
 
         setUpBottomNavigationView();
         setUpToolBar();
+        queryPosts();
 
+    }
+
+    private void queryPosts() {
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include(Post.KEY_USER);
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> objects, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error when querying new posts");
+                    return;
+                }
+                posts = objects;
+            }
+        });
     }
 
     private void setUpBottomNavigationView() {

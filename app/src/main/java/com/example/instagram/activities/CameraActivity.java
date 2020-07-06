@@ -1,4 +1,4 @@
-package com.example.instagram.Activities;
+package com.example.instagram.activities;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,9 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.instagram.R;
 import com.example.instagram.databinding.ActivityCameraBinding;
-import com.example.instagram.databinding.ActivityMainBinding;
 import com.example.instagram.models.Post;
 import com.parse.ParseException;
 import com.parse.ParseFile;
