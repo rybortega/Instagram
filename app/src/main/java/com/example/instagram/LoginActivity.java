@@ -87,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), String.valueOf(e), Toast.LENGTH_SHORT).show();
                     return;
                 }
+                Toast.makeText(getApplicationContext(), "Successfully Logged In!", Toast.LENGTH_SHORT);
                 goMainActivity();
             }
         });
@@ -100,13 +101,13 @@ public class LoginActivity extends AppCompatActivity {
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
-                if (e == null) {
-                    Toast.makeText(getApplicationContext(), "Sucessful Sign Up!", Toast.LENGTH_SHORT);
-                } else {
+                if (e != null) {
                     ParseUser.logOut();
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
-            }
+                Toast.makeText(getApplicationContext(), "Successfully Signed Up!", Toast.LENGTH_SHORT);
+                goMainActivity();
+                }
         });
     }
 
