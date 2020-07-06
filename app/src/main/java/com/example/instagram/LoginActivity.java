@@ -16,6 +16,7 @@ import com.example.instagram.databinding.ActivityLoginBinding;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -23,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etUsername;
     private EditText etPassword;
     private Button btnLogin;
-    private TextView tvRegister;
+    private Button btnSignup;
     private String email;
     private String password;
 
@@ -34,10 +35,14 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         getSupportActionBar().hide();
 
+        if (ParseUser.getCurrentUser() != null) {
+            goMainActivity();
+        }
+
         etUsername = binding.etUsername;
         etPassword = binding.etPassword;
         btnLogin = binding.btnLogin;
-        tvRegister = binding.tvRegister;
+        btnSignup = binding.btnSignup;
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,18 +60,26 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        tvRegister.setOnClickListener(new View.OnClickListener() {
+        btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                email = etUsername.getText().toString();
+                password = etPassword.getText().toString();
+
+                if (email == null || password == null || email.length() == 0 || password.length() == 0) {
+                    Toast.makeText(getApplicationContext(), "Email and password cannot be empty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                registerUser(email, password);
             }
         });
 
     }
 
-    private void loginUser(String email, String password) {
+    private void loginUser(String username, String password) {
         Log.e(TAG, "Attempt to login");
-        ParseUser.logInInBackground(email, password, new LogInCallback() {
+        ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
                 if (e != null) {
@@ -74,8 +87,31 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), String.valueOf(e), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                goMainActivity();
             }
         });
+    }
+
+    private void registerUser(String username, String password) {
+        Log.e(TAG, "Attempt to register");
+        ParseUser user = new ParseUser();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Toast.makeText(getApplicationContext(), "Sucessful Sign Up!", Toast.LENGTH_SHORT);
+                } else {
+                    ParseUser.logOut();
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    private void goMainActivity() {
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        finish();
     }
 }
