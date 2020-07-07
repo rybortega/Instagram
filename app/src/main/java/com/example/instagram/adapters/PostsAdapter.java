@@ -47,12 +47,16 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     }
 
     public PostsAdapter(Context context, List<Post> posts) {
+        Log.e(TAG, "creating adapter");
+
         this.context = context;
         this.posts = posts;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Log.e(TAG, "on bind view holder");
+
         Post post = posts.get(position);
         holder.bind(post);
     }
@@ -86,7 +90,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         TextView tvTimestamp;
 
         public ViewHolder(@NonNull ItemPostBinding itemPostBinding) {
+
             super(itemPostBinding.getRoot());
+            Log.e(TAG, "initialize viewholder");
+
             ivProfileImage = itemPostBinding.ivProfileImg;
             tvUsername = itemPostBinding.tvUsername;
             tvDescription = itemPostBinding.tvDescription;
@@ -99,6 +106,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         }
 
         public void bind(final Post post) {
+            Log.e(TAG, "binding");
             tvUsername.setText(post.getUser().getUsername());
             tvDescription.setText(post.getDescription());
             tvTimestamp.setText(post.getRelativeTime());
