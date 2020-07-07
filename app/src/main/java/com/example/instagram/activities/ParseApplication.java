@@ -3,6 +3,7 @@ package com.example.instagram.activities;
 import android.app.Application;
 
 import com.example.instagram.models.Post;
+import com.example.instagram.models.User;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
@@ -15,6 +16,7 @@ public class ParseApplication extends Application {
         super.onCreate();
 
         ParseObject.registerSubclass(Post.class);
+        ParseObject.registerSubclass(User.class);
         Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();

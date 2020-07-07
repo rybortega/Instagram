@@ -1,6 +1,9 @@
 package com.example.instagram.activities;
 
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
@@ -13,14 +16,22 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.instagram.R;
 import com.example.instagram.databinding.ActivityMainBinding;
+import com.example.instagram.databinding.FragmentProfileBinding;
 import com.example.instagram.fragments.ComposeFragment;
 import com.example.instagram.fragments.NewsfeedFragment;
 import com.example.instagram.fragments.ProfileFragment;
+import com.example.instagram.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+
+import org.parceler.Parcels;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String KEY_POST = "KeyPost";
+    public static final String KEY_USER = "KeyUser";
+    private static final String TAG = "MainActivity";
 
     private BottomNavigationView bottomNavigation;
     private ActivityMainBinding activityMainBinding;
@@ -39,10 +50,16 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
 
-        // define your fragments here
+        ParseUser user = ParseUser.getCurrentUser();
+        try {
+            user = user.fetch();
+        } catch (ParseException e) {
+            Log.e(TAG, "Couldn't fetch current user");
+        }
+
         final Fragment composeFragment = new ComposeFragment();
         final Fragment newsfeedFragment = new NewsfeedFragment();
-        final Fragment profileFragment = new ProfileFragment();
+        final Fragment profileFragment = ProfileFragment.newInstance(Parcels.wrap(user));
 
         bottomNavigation = activityMainBinding.bottomNavigation;
         bottomNavigation.setOnNavigationItemSelectedListener(

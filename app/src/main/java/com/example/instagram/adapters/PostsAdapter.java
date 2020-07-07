@@ -17,7 +17,10 @@ import com.example.instagram.databinding.ItemPostBinding;
 
 import com.example.instagram.fragments.DetailFragment;
 import com.example.instagram.models.Post;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
+
 import org.parceler.Parcels;
 
 import java.util.List;
