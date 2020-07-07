@@ -25,6 +25,7 @@ import com.example.instagram.R;
 import com.example.instagram.activities.CameraActivity;
 import com.example.instagram.activities.MainActivity;
 import com.example.instagram.databinding.FragmentComposeBinding;
+import com.example.instagram.databinding.FragmentNewsfeedBinding;
 import com.example.instagram.models.Post;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -67,10 +68,19 @@ public class ComposeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        fragmentComposeBinding = FragmentComposeBinding.inflate(inflater);
+        fragmentComposeBinding = FragmentComposeBinding.inflate(inflater, container, false);
+
         ivCamera = fragmentComposeBinding.ivCamera;
         etDescription = fragmentComposeBinding.etDescription;
         btShare = fragmentComposeBinding.btnShare;
+
+        ivCamera = fragmentComposeBinding.ivCamera;
+        ivCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchCamera();
+            }
+        });
 
         btShare.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +97,7 @@ public class ComposeFragment extends Fragment {
             }
         });
 
-        return inflater.inflate(R.layout.fragment_compose, container, false);
+        return fragmentComposeBinding.getRoot();
     }
 
     public void savePost(String description, ParseUser user, File photoFile) {
@@ -105,7 +115,8 @@ public class ComposeFragment extends Fragment {
                 }
                 Log.e(TAG,"Done");
                 Toast.makeText(getContext(), "Image shared", Toast.LENGTH_SHORT).show();
-                getActivity().onBackPressed();
+                etDescription.setText("");
+                ivCamera.setImageBitmap(null);
             }
         });
     }
@@ -137,10 +148,7 @@ public class ComposeFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                // by this point we have the camera photo on disk
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                // RESIZE BITMAP, see section below
-                // Load the taken image into a preview
                 ivCamera.setImageBitmap(takenImage);
             } else { // Result was a failure
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();

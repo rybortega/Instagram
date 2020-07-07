@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/rlCamera"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="350dp"
         android:background="@color/black">
 
         <ImageView
@@ -28,7 +28,7 @@
         android:layout_below="@+id/rlCamera"
         android:layout_marginTop="10dp"
         android:hint="Enter your description here"
-        android:minLines="5" />
+        android:minLines="4" />
 
     <Button
         android:id="@+id/btnShare"
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/etDescription"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="10dp"
         android:backgroundTint="@color/instagramPink"
         android:text="SHARE"
         android:textColor="@color/white" />

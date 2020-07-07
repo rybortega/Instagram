@@ -46,7 +46,7 @@ public class NewsfeedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        fragmentNewsfeedBinding = FragmentNwsfeedBinding.inflate(inflater, container, false);
+        fragmentNewsfeedBinding = FragmentNewsfeedBinding.inflate(inflater, container, false);
         return fragmentNewsfeedBinding.getRoot();
     }
 
@@ -97,7 +97,7 @@ public class NewsfeedFragment extends Fragment {
                 rvPosts.getAdapter().notifyDataSetChanged();
                 Log.e(TAG, rvPosts.getAdapter().toString());
                 Log.e(TAG, rvPosts.getLayoutManager().toString());
-                //swipeContainer.setRefreshing(false);
+                swipeContainer.setRefreshing(false);
                 Log.i(TAG, "Query completed, got " + posts.size() + " new posts");
             }
         });
