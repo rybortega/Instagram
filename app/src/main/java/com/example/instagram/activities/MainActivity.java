@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.instagram.R;
-import com.example.instagram.databinding.ActivityDetailBinding;
 import com.example.instagram.databinding.ActivityMainBinding;
 import com.example.instagram.fragments.ComposeFragment;
 import com.example.instagram.fragments.NewsfeedFragment;
@@ -27,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding activityMainBinding;
     private Toolbar tbMenu;
     public static ProgressBar progressBar;
+    public static FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setUpToolBar();
         setUpProgressBar();
 
-        final FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager = getSupportFragmentManager();
 
         // define your fragments here
         final Fragment composeFragment = new ComposeFragment();

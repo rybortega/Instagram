@@ -1,30 +1,24 @@
 package com.example.instagram.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.media.Image;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.instagram.activities.DetailActivity;
+import com.example.instagram.R;
 import com.example.instagram.activities.MainActivity;
 import com.example.instagram.databinding.ItemPostBinding;
 
+import com.example.instagram.fragments.DetailFragment;
 import com.example.instagram.models.Post;
 import com.parse.ParseFile;
 import org.parceler.Parcels;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -115,9 +109,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, DetailActivity.class);
-                    intent.putExtra(MainActivity.KEY_POST, Parcels.wrap(posts.get(getAdapterPosition())));
-                    context.startActivity(intent);
+
+                    DetailFragment detailFragment = DetailFragment.newInstance(Parcels.wrap(posts.get(getAdapterPosition())));
+                    MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, detailFragment).commit();
                 }
             });
         }
