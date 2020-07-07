@@ -43,7 +43,6 @@ public class NewsfeedFragment extends Fragment {
     private EndlessRecyclerViewScrollListener scrollListener;
     private LinearLayoutManager linearLayoutManager;
     private Date lastPost;
-    private Date firstPost;
 
     public NewsfeedFragment() {
     }
@@ -75,6 +74,7 @@ public class NewsfeedFragment extends Fragment {
         setUpScrollListener();
         rvPosts.addOnScrollListener(scrollListener);
 
+        posts.clear();
         setUpSwipeContainer();
         queryPosts();
     }
@@ -84,8 +84,10 @@ public class NewsfeedFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                posts.clear();
                 lastPost = new Date();
-                queryNewerPosts();
+                queryPosts();
+                swipeContainer.setRefreshing(false);
             }
         });
         // Configure the refreshing colors
@@ -99,7 +101,10 @@ public class NewsfeedFragment extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                queryOlderPosts();
+                Log.e(TAG, "load more");
+                queryPosts();
+                swipeContainer.setRefreshing(false);
+
             }
         };
     }
@@ -108,6 +113,7 @@ public class NewsfeedFragment extends Fragment {
         MainActivity.showProgressBar();
         Log.i(TAG, "Start querying for new post");
 
+        // Set up query
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.addDescendingOrder("createdAt");
@@ -123,72 +129,14 @@ public class NewsfeedFragment extends Fragment {
                 }
                 Log.e(TAG, lastPost.toString());
                 if (newPosts.size() > 0) {
-                    firstPost = newPosts.get(0).getCreatedAt();
                     lastPost = newPosts.get(newPosts.size() - 1).getCreatedAt();
                 }
-                posts.clear();
                 posts.addAll(newPosts);
-                rvPosts.getAdapter().notifyDataSetChanged();
-                Log.i(TAG, "Query completed, got " + posts.size() + " new posts");
-                MainActivity.hideProgressBar();
-            }
-        });
-    }
-
-    private void queryNewerPosts() {
-        Log.i(TAG, "Start querying for newer post");
-
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        query.addDescendingOrder("createdAt");
-        query.whereLessThan("createdAt", firstPost);
-        query.setLimit(QUERY_LIMIT);
-
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> newPosts, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error when querying new posts");
-                    return;
-                }
-                Log.e(TAG, lastPost.toString());
-
-                if (newPosts.size() > 0) {
-                    firstPost = newPosts.get(0).getCreatedAt();
-                }
-                posts.addAll(newPosts);
-                rvPosts.getAdapter().notifyDataSetChanged();
+                Log.e(TAG, String.valueOf(posts.size()));
+                adapter.notifyDataSetChanged();
                 swipeContainer.setRefreshing(false);
                 Log.i(TAG, "Query completed, got " + newPosts.size() + " new posts");
-            }
-        });
-    }
-
-    private void queryOlderPosts() {
-        Log.i(TAG, "Start querying for older post - refreshing");
-
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        query.addDescendingOrder("createdAt");
-        query.whereLessThan("createdAt", lastPost);
-        query.setLimit(QUERY_LIMIT);
-
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> newPosts, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error when querying new posts");
-                    return;
-                }
-                Log.e(TAG, lastPost.toString());
-
-                if (newPosts.size() > 0) {
-                    lastPost = newPosts.get(newPosts.size() - 1).getCreatedAt();
-                }
-                posts.addAll(newPosts);
-                rvPosts.getAdapter().notifyDataSetChanged();
-                //swipeContainer.setRefreshing(false);
-                Log.i(TAG, "Query completed, got " + newPosts.size() + " new posts");
+                MainActivity.hideProgressBar();
             }
         });
     }
