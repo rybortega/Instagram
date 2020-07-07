@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.instagram.EndlessRecyclerViewScrollListener;
 import com.example.instagram.R;
@@ -42,6 +43,7 @@ public class NewsfeedFragment extends Fragment {
     private EndlessRecyclerViewScrollListener scrollListener;
     private LinearLayoutManager linearLayoutManager;
     private Date lastPost;
+    private Date firstPost;
 
     public NewsfeedFragment() {
     }
@@ -82,7 +84,8 @@ public class NewsfeedFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                queryPosts();
+                lastPost = new Date();
+                queryNewerPosts();
             }
         });
         // Configure the refreshing colors
@@ -96,7 +99,7 @@ public class NewsfeedFragment extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                queryNewPosts();
+                queryOlderPosts();
             }
         };
     }
@@ -118,22 +121,51 @@ public class NewsfeedFragment extends Fragment {
                     Log.e(TAG, "Error when querying new posts");
                     return;
                 }
-                if (newPosts.size() == QUERY_LIMIT) {
-                    lastPost = newPosts.get(QUERY_LIMIT - 1).getCreatedAt();
+                Log.e(TAG, lastPost.toString());
+                if (newPosts.size() > 0) {
+                    firstPost = newPosts.get(0).getCreatedAt();
+                    lastPost = newPosts.get(newPosts.size() - 1).getCreatedAt();
                 }
                 posts.clear();
                 posts.addAll(newPosts);
                 rvPosts.getAdapter().notifyDataSetChanged();
-                swipeContainer.setRefreshing(false);
                 Log.i(TAG, "Query completed, got " + posts.size() + " new posts");
                 MainActivity.hideProgressBar();
             }
         });
     }
 
-    private void queryNewPosts() {
-        MainActivity.showProgressBar();
-        Log.i(TAG, "Start querying for new post - refreshing");
+    private void queryNewerPosts() {
+        Log.i(TAG, "Start querying for newer post");
+
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include(Post.KEY_USER);
+        query.addDescendingOrder("createdAt");
+        query.whereLessThan("createdAt", firstPost);
+        query.setLimit(QUERY_LIMIT);
+
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> newPosts, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error when querying new posts");
+                    return;
+                }
+                Log.e(TAG, lastPost.toString());
+
+                if (newPosts.size() > 0) {
+                    firstPost = newPosts.get(0).getCreatedAt();
+                }
+                posts.addAll(newPosts);
+                rvPosts.getAdapter().notifyDataSetChanged();
+                swipeContainer.setRefreshing(false);
+                Log.i(TAG, "Query completed, got " + newPosts.size() + " new posts");
+            }
+        });
+    }
+
+    private void queryOlderPosts() {
+        Log.i(TAG, "Start querying for older post - refreshing");
 
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
@@ -148,14 +180,15 @@ public class NewsfeedFragment extends Fragment {
                     Log.e(TAG, "Error when querying new posts");
                     return;
                 }
-                if (newPosts.size() == QUERY_LIMIT) {
-                    lastPost = newPosts.get(QUERY_LIMIT - 1).getCreatedAt();
+                Log.e(TAG, lastPost.toString());
+
+                if (newPosts.size() > 0) {
+                    lastPost = newPosts.get(newPosts.size() - 1).getCreatedAt();
                 }
                 posts.addAll(newPosts);
                 rvPosts.getAdapter().notifyDataSetChanged();
-                swipeContainer.setRefreshing(false);
+                //swipeContainer.setRefreshing(false);
                 Log.i(TAG, "Query completed, got " + newPosts.size() + " new posts");
-                MainActivity.hideProgressBar();
             }
         });
     }
