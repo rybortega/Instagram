@@ -46,7 +46,7 @@ public class User extends ParseUser implements Parcelable {
                     return;
                 }
                 posts.addAll(newPosts);
-                Log.i(TAG, "Query on user " + getUsername() + "completed, got " + newPosts.size() + " new posts");
+                Log.i(TAG, "Query on user " + getUsername() + " completed, got " + newPosts.size() + " new posts");
                 MainActivity.hideProgressBar();
             }
         });

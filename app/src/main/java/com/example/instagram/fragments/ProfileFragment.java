@@ -5,24 +5,33 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.instagram.R;
 import com.example.instagram.activities.MainActivity;
+import com.example.instagram.adapters.PostGridAdapter;
+import com.example.instagram.adapters.PostsAdapter;
 import com.example.instagram.databinding.FragmentProfileBinding;
+import com.example.instagram.models.Post;
 import com.example.instagram.models.User;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,6 +45,10 @@ public class ProfileFragment extends Fragment {
     private FragmentProfileBinding fragmentProfileBinding;
     private ImageView ivProfileImg;
     private TextView tvUsername;
+    private GridView gvPosts;
+    private List<Post> posts;
+    private LinearLayoutManager linearLayoutManager;
+    private PostGridAdapter adapter;
 
     public ProfileFragment() {
     }
@@ -68,14 +81,22 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ivProfileImg = fragmentProfileBinding.ivProfileImg;
         tvUsername = fragmentProfileBinding.tvUsername;
+        gvPosts = fragmentProfileBinding.gvPosts;
 
         tvUsername.setText(user.getUsername());
+
         ParseFile profileImg = ParseUser.getCurrentUser().getParseFile("profileImg");
-        Log.e(TAG, ParseUser.getCurrentUser().getObjectId().toString());
         if (profileImg != null) {
             Glide.with(getActivity()).load(profileImg.getUrl().replaceAll("http", "https")).into(ivProfileImg);
         } else {
             Log.e(TAG, "CANNOT FIND IMAGE");
         }
+
+        posts = user.getPosts();
+        Log.e(TAG, posts.toString());
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        adapter = new PostGridAdapter(getActivity(), posts);
+        gvPosts.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 }

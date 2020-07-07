@@ -26,6 +26,7 @@
         tools:text="hatruong99" />
 
     <GridView
+        android:id="@+id/gvPosts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/ivProfileImg"
