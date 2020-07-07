@@ -21,11 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.instagram.R;
-import com.example.instagram.activities.CameraActivity;
-import com.example.instagram.activities.MainActivity;
 import com.example.instagram.databinding.FragmentComposeBinding;
-import com.example.instagram.databinding.FragmentNewsfeedBinding;
 import com.example.instagram.models.Post;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -33,7 +29,6 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.File;
-import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 

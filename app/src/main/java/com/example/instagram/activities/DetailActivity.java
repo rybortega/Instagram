@@ -53,7 +53,6 @@ public class DetailActivity extends AppCompatActivity {
         ivSave = activityDetailBinding.ivSave;
         tvTimestamp = activityDetailBinding.tvTimeStamp;
 
-        setUpBottomNavigationView();
         setUpToolBar();
         setUpViews();
     }
@@ -72,40 +71,7 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-    private void setUpBottomNavigationView() {
-        bottomNavigationView = activityDetailBinding.bottomNavigation;
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.miHome:
-                        goMainActivity();
-                        return true;
-                    case R.id.miCompose:
-                        goCameraActivity();
-                        return true;
-                    case R.id.miProfile:
-                        goProfileActivity();
-                        return true;
-                    default: return true;
-                }
-            }
-        });
-    }
-
     private void setUpToolBar() {
         tbMenu = activityDetailBinding.tbMenu;
-    }
-
-    private void goMainActivity() {
-        startActivity(new Intent(DetailActivity.this, MainActivity.class));
-    }
-
-    private void goCameraActivity() {
-        startActivity(new Intent(DetailActivity.this, CameraActivity.class));
-    }
-
-    private void goProfileActivity() {
-        startActivity(new Intent(DetailActivity.this, ProfileActivity.class));
     }
 }
