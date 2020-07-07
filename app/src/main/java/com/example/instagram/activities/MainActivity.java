@@ -3,6 +3,7 @@ package com.example.instagram.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import com.example.instagram.R;
 import com.example.instagram.adapters.PostsAdapter;
 import com.example.instagram.databinding.ActivityMainBinding;
+import com.example.instagram.fragments.ComposeFragment;
 import com.example.instagram.models.Post;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
@@ -105,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                         goMainActivity();
                         return true;
                     case R.id.miCompose:
-                        goCameraActivity();
+                        goComposeFragment();
                         return true;
                     case R.id.miProfile:
                         goProfileActivity();
@@ -124,8 +126,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, MainActivity.class));
     }
 
-    private void goCameraActivity() {
-        startActivity(new Intent(MainActivity.this, CameraActivity.class));
+    private void goComposeFragment() {
+        FragmentManager fm = getSupportFragmentManager();
+        ComposeFragment composeFragment = ComposeFragment.newInstance();
+        composeFragment.show(fm, "fragment_compose");
     }
 
     private void goProfileActivity() {

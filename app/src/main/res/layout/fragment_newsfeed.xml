@@ -49,13 +49,6 @@
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 
-    <FrameLayout
-        android:id="@+id/flContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tbMenu"
-        android:layout_above="@+id/bottomNavigation"/>
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
@@ -69,5 +62,22 @@
         app:backgroundTint="@color/white"
         app:labelVisibilityMode="unlabeled"
         app:menu="@menu/menu_bottom_navigation" />
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomNavigation"
+        android:layout_below="@+id/tbMenu"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp" >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPosts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

@@ -19,11 +19,12 @@
 
             <ImageView
                 android:id="@+id/ivCompose"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_centerInParent="false"
                 android:layout_centerVertical="true"
-                android:src="@drawable/instagram_new_post_filled_24"
+                android:src="@drawable/ic_camera"
+                android:tint="#000000"
                 android:title="HOME" />
 
             <ImageView
@@ -38,8 +39,8 @@
 
             <ImageView
                 android:id="@+id/ivDirect"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="91dp"
                 android:layout_toEndOf="@+id/ivLogo"
