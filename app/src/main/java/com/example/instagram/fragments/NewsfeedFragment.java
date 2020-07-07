@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.instagram.R;
+import com.example.instagram.activities.MainActivity;
 import com.example.instagram.adapters.PostsAdapter;
 import com.example.instagram.databinding.FragmentNewsfeedBinding;
 import com.example.instagram.databinding.ItemPostBinding;
@@ -80,7 +81,8 @@ public class NewsfeedFragment extends Fragment {
     }
 
     private void queryPosts() {
-        Log.e(TAG, "start querying");
+        MainActivity.showProgressBar();
+        Log.i(TAG, "Start querying for new post");
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.addDescendingOrder("createdAt");
@@ -95,10 +97,9 @@ public class NewsfeedFragment extends Fragment {
                 //posts.clear();
                 posts.addAll(newPosts);
                 rvPosts.getAdapter().notifyDataSetChanged();
-                Log.e(TAG, rvPosts.getAdapter().toString());
-                Log.e(TAG, rvPosts.getLayoutManager().toString());
                 swipeContainer.setRefreshing(false);
                 Log.i(TAG, "Query completed, got " + posts.size() + " new posts");
+                MainActivity.hideProgressBar();
             }
         });
     }

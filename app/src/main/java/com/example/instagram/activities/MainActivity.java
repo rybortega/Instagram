@@ -3,9 +3,11 @@ package com.example.instagram.activities;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -23,14 +25,17 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigation;
     private ActivityMainBinding activityMainBinding;
-
-    public static FrameLayout flContainer;
+    private Toolbar tbMenu;
+    public static ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(activityMainBinding.getRoot());
+
+        setUpToolBar();
+        setUpProgressBar();
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -63,5 +68,19 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         bottomNavigation.setSelectedItemId(R.id.miHome);
+    }
+
+    private void setUpToolBar() {
+        tbMenu = activityMainBinding.tbMenu;
+    }
+    public void setUpProgressBar() {
+        progressBar = activityMainBinding.progressBar;
+    }
+    public static void showProgressBar() {
+        progressBar.setVisibility(ProgressBar.VISIBLE);
+    }
+
+    public static void hideProgressBar() {
+        progressBar.setVisibility(ProgressBar.INVISIBLE);
     }
 }

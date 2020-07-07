@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.instagram.activities.MainActivity;
 import com.example.instagram.databinding.FragmentComposeBinding;
 import com.example.instagram.models.Post;
 import com.parse.ParseException;
@@ -80,6 +81,7 @@ public class ComposeFragment extends Fragment {
         btShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MainActivity.showProgressBar();
                 String description = etDescription.getText().toString();
                 ParseUser user = ParseUser.getCurrentUser();
                 if (description.isEmpty()) {
@@ -112,6 +114,7 @@ public class ComposeFragment extends Fragment {
                 Toast.makeText(getContext(), "Image shared", Toast.LENGTH_SHORT).show();
                 etDescription.setText("");
                 ivCamera.setImageBitmap(null);
+                MainActivity.hideProgressBar();
             }
         });
     }
