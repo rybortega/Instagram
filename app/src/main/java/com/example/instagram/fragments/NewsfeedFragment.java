@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import com.example.instagram.R;
 import com.example.instagram.adapters.PostsAdapter;
 import com.example.instagram.databinding.FragmentNewsfeedBinding;
+import com.example.instagram.databinding.ItemPostBinding;
 import com.example.instagram.models.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -45,20 +46,13 @@ public class NewsfeedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        Log.e(TAG, "created adapter");
-
-
-
-
-        return inflater.inflate(R.layout.fragment_newsfeed, container, false);
+        fragmentNewsfeedBinding = FragmentNwsfeedBinding.inflate(inflater, container, false);
+        return fragmentNewsfeedBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        fragmentNewsfeedBinding = FragmentNewsfeedBinding.inflate(getLayoutInflater());
-
         rvPosts = fragmentNewsfeedBinding.rvPosts;
         posts = new ArrayList<>();
         adapter = new PostsAdapter(getActivity(), posts);
@@ -103,7 +97,7 @@ public class NewsfeedFragment extends Fragment {
                 rvPosts.getAdapter().notifyDataSetChanged();
                 Log.e(TAG, rvPosts.getAdapter().toString());
                 Log.e(TAG, rvPosts.getLayoutManager().toString());
-                swipeContainer.setRefreshing(false);
+                //swipeContainer.setRefreshing(false);
                 Log.i(TAG, "Query completed, got " + posts.size() + " new posts");
             }
         });
