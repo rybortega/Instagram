@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.instagram.R;
 import com.example.instagram.activities.MainActivity;
 
@@ -58,7 +59,10 @@ public class PostGridAdapter extends BaseAdapter {
         ImageView ivImage = new ImageView(context);
         ParseFile image = posts.get(position).getImg();
         if (image != null) {
-            Glide.with(context).load(image.getUrl().replaceAll("http", "https")).into(ivImage);
+            Glide.with(context).load(image.getUrl()
+                    .replaceAll("http", "https"))
+                    .apply(new RequestOptions().override(500, 500))
+                    .into(ivImage);
         }
         ivImage.setOnClickListener(new View.OnClickListener() {
             @Override

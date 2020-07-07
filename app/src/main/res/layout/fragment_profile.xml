@@ -32,9 +32,10 @@
         android:layout_below="@+id/ivProfileImg"
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/white"
-        android:horizontalSpacing="2dp"
+        android:horizontalSpacing="5dp"
         android:gravity="center"
+        android:stretchMode="columnWidth"
         android:numColumns="3"
-        android:verticalSpacing="2dp" />
+        android:verticalSpacing="5dp" />
 
 </RelativeLayout>
