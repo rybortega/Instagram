@@ -24,7 +24,10 @@ import com.example.instagram.adapters.PostsAdapter;
 import com.example.instagram.databinding.FragmentProfileBinding;
 import com.example.instagram.models.Post;
 import com.example.instagram.models.User;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
@@ -92,11 +95,36 @@ public class ProfileFragment extends Fragment {
             Log.e(TAG, "CANNOT FIND IMAGE");
         }
 
-        posts = user.getPosts();
-        Log.e(TAG, posts.toString());
+        posts = new ArrayList<>();
         linearLayoutManager = new LinearLayoutManager(getActivity());
         adapter = new PostGridAdapter(getActivity(), posts);
         gvPosts.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        queryPosts();
+    }
+
+    private void queryPosts() {
+        MainActivity.showProgressBar();
+        Log.i(TAG, "Start querying for new post in profile");
+
+        // Set up query
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include(Post.KEY_USER);
+        query.addDescendingOrder("createdAt");
+        query.whereContains("user", user.getObjectId());
+
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> newPosts, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error when querying new posts");
+                    return;
+                }
+                posts.addAll(newPosts);
+                Log.e(TAG, String.valueOf(posts.size()));
+                adapter.notifyDataSetChanged();
+                Log.i(TAG, "Query on user " + user.getUsername() + " completed, got " + newPosts.size() + " new posts");
+                MainActivity.hideProgressBar();
+            }
+        });
     }
 }

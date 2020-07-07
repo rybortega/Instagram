@@ -31,6 +31,10 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/ivProfileImg"
         android:layout_marginTop="20dp"
-        android:numColumns="3" />
+        android:backgroundTint="@color/white"
+        android:horizontalSpacing="2dp"
+        android:gravity="center"
+        android:numColumns="3"
+        android:verticalSpacing="2dp" />
 
 </RelativeLayout>

@@ -1,6 +1,7 @@
 package com.example.instagram.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.instagram.R;
 import com.example.instagram.activities.MainActivity;
-import com.example.instagram.databinding.ItemPostBinding;
 
-import com.example.instagram.databinding.ItemPostGridBinding;
+import com.example.instagram.databinding.ItemGridBinding;
 import com.example.instagram.fragments.DetailFragment;
 import com.example.instagram.models.Post;
 import com.parse.ParseException;
@@ -63,7 +63,6 @@ public class PostGridAdapter extends BaseAdapter {
         ivImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 DetailFragment detailFragment = DetailFragment.newInstance(Parcels.wrap(posts.get(position)));
                 MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, detailFragment).commit();
             }
