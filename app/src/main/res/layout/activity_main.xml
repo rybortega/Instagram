@@ -62,4 +62,13 @@
         app:labelVisibilityMode="unlabeled"
         app:menu="@menu/menu_bottom_navigation" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPosts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomNavigation"
+        android:layout_below="@+id/tbMenu"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp" />
+
 </RelativeLayout>
