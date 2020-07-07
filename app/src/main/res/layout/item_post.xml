@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context=".activities.ProfileActivity"
-    >
+    android:layout_height="wrap_content">
 
 
     <ImageView
         android:id="@+id/ivProfileImg"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        tools:srcCompat="@tools:sample/avatars"/>
 
     <TextView
         android:id="@+id/tvUsername"
@@ -20,18 +20,30 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="25dp"
         android:layout_toEndOf="@+id/ivProfileImg"
         android:textSize="18sp"
         android:textStyle="bold"
         tools:text="hatruong99" />
+
+    <TextView
+        android:id="@+id/tvTimeStamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="15dp"
+        android:textSize="18sp"
+        tools:text="1h" />
 
     <ImageView
         android:id="@+id/ivImg"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_below="@+id/ivProfileImg"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <TextView
@@ -39,8 +51,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivImg"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:textSize="18sp"
         tools:text="This is my caption" />
 
@@ -48,14 +60,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvDescription"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="5dp">
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp">
+
 
         <ImageView
             android:id="@+id/ivLike"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            tools:src="@drawable/ufi_heart" />
+            android:src="@drawable/ufi_heart" />
 
         <ImageView
             android:id="@+id/ivComment"
@@ -63,7 +76,7 @@
             android:layout_height="30dp"
             android:layout_marginStart="10dp"
             android:layout_toRightOf="@id/ivLike"
-            tools:src="@drawable/ufi_comment" />
+            android:src="@drawable/ufi_comment" />
 
         <ImageView
             android:id="@+id/ivShare"
@@ -71,7 +84,7 @@
             android:layout_height="35dp"
             android:layout_marginStart="10dp"
             android:layout_toRightOf="@id/ivComment"
-            tools:src="@drawable/ufi_new_direct" />
+            android:src="@drawable/ufi_new_direct" />
 
         <ImageView
             android:id="@+id/ivSave"
@@ -79,7 +92,7 @@
             android:layout_height="35dp"
             android:layout_marginStart="250dp"
             android:layout_toRightOf="@id/ivShare"
-            tools:src="@drawable/ufi_save" />
+            android:src="@drawable/ufi_save" />
     </RelativeLayout>
 
 </RelativeLayout>

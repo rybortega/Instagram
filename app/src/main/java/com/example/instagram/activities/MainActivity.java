@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,7 +27,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String KEY_POST = "KeyPost";
     private static final String TAG = "MainActivity";
+
     private BottomNavigationView bottomNavigationView;
     private Toolbar tbMenu;
     private ImageView ivCompose;
@@ -34,14 +37,18 @@ public class MainActivity extends AppCompatActivity {
     private List<Post> posts;
     private PostsAdapter adapter;
     private RecyclerView rvPosts;
+    private SwipeRefreshLayout swipeContainer;
+    private ActivityMainBinding activityMainBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityMainBinding activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
+        activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(activityMainBinding.getRoot());
+
         setUpBottomNavigationView();
         setUpToolBar();
+        setUpSwipeContainer();
 
         posts = new ArrayList<>();
         adapter = new PostsAdapter(this, posts);
@@ -53,9 +60,25 @@ public class MainActivity extends AppCompatActivity {
         queryPosts();
     }
 
+    private void setUpSwipeContainer() {
+        swipeContainer = activityMainBinding.swipeContainer;
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryPosts();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+    }
+
     private void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
+        query.addDescendingOrder("createdAt");
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> newPosts, ParseException e) {
@@ -63,8 +86,10 @@ public class MainActivity extends AppCompatActivity {
                     Log.e(TAG, "Error when querying new posts");
                     return;
                 }
+                posts.clear();
                 posts.addAll(newPosts);
                 adapter.notifyDataSetChanged();
+                swipeContainer.setRefreshing(false);
                 Log.i(TAG, "Query completed, got " + posts.size() + " new posts");
             }
         });
