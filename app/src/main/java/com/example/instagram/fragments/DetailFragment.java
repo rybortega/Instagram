@@ -154,6 +154,27 @@ public class DetailFragment extends Fragment {
             }
         });
 
+        ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    goToProfile();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        tvUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    goToProfile();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void updateLike() throws ParseException {
@@ -200,5 +221,10 @@ public class DetailFragment extends Fragment {
     public void goToComment() {
         CommentFragment commentFragment = CommentFragment.newInstance(Parcels.wrap(post));
         MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, commentFragment).commit();
+    }
+
+    private void goToProfile() throws ParseException {
+        ProfileFragment profileFragment = ProfileFragment.newInstance(Parcels.wrap(post.getUser().fetch()));
+        MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, profileFragment).commit();
     }
 }
