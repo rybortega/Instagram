@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/ivProfileImg"
@@ -35,15 +35,15 @@
             android:textSize="18sp"
             tools:text="1h" />
 
-        <ImageView
-            android:id="@+id/ivImg"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_below="@+id/ivProfileImg"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+    <ImageView
+        android:id="@+id/ivImg"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@+id/ivProfileImg"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <RelativeLayout
         android:id="@+id/rlInfo"
@@ -116,5 +116,13 @@
         android:layout_marginTop="10dp"
         android:textSize="18sp"
         tools:text="This is my caption" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvComment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tvDescription"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp" />
 
 </RelativeLayout>

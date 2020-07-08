@@ -4,10 +4,13 @@ import android.os.Parcelable;
 import android.text.format.DateUtils;
 import android.util.Log;
 
+import com.example.instagram.activities.MainActivity;
+import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
@@ -15,7 +18,9 @@ import org.parceler.Parcel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 @ParseClassName("Post")
@@ -28,6 +33,7 @@ public class Post extends ParseObject implements Parcelable {
     public static final String KEY_USER = "user";
     public static final String KEY_TIME = "createdAt";
     public static final String KEY_LIKE = "likedBy";
+    public static final String KEY_COMMENT = "Comment";
 
     public String getDescription() {
         return getString(KEY_DESCRIPTION);

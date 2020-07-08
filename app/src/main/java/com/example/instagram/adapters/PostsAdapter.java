@@ -85,8 +85,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         ImageView ivLike;
         ImageView ivComment;
         ImageView ivShare;
-        ImageView ivSave;
         TextView tvTimestamp;
+        TextView tvUsernameDescription;
 
         public ViewHolder(@NonNull ItemPostBinding itemPostBinding) {
 
@@ -99,12 +99,15 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivComment = itemPostBinding.ivComment;
             ivShare = itemPostBinding.ivShare;
             tvTimestamp = itemPostBinding.tvTimeStamp;
+            tvUsernameDescription = itemPostBinding.tvUsernameDescription;
         }
 
         public void bind(final Post post) throws ParseException {
             tvUsername.setText(post.getUser().getUsername());
             tvDescription.setText(post.getDescription());
             tvTimestamp.setText(post.getRelativeTime());
+            tvUsernameDescription.setText(post.getUser().getUsername());
+
             ParseFile image = post.getImg();
             if (image != null) {
                 Glide.with(context).load(image.getUrl().replaceAll("http", "https")).into(ivImage);

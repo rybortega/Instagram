@@ -2,6 +2,7 @@ package com.example.instagram.activities;
 
 import android.app.Application;
 
+import com.example.instagram.models.Comment;
 import com.example.instagram.models.Post;
 import com.example.instagram.models.User;
 import com.parse.Parse;
@@ -17,6 +18,7 @@ public class ParseApplication extends Application {
 
         ParseObject.registerSubclass(Post.class);
         ParseObject.registerSubclass(User.class);
+        ParseObject.registerSubclass(Comment.class);
         Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();

@@ -5,8 +5,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,18 +19,28 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.instagram.R;
 import com.example.instagram.activities.MainActivity;
+import com.example.instagram.adapters.CommentsAdapter;
+import com.example.instagram.adapters.PostsAdapter;
 import com.example.instagram.databinding.FragmentDetailBinding;
 import com.example.instagram.databinding.FragmentNewsfeedBinding;
+import com.example.instagram.models.Comment;
 import com.example.instagram.models.Post;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 public class DetailFragment extends Fragment {
 
+    private static final String TAG = "DetailFragment";
     private Post post;
     private FragmentDetailBinding fragmentDetailBinding;
 
@@ -42,6 +55,10 @@ public class DetailFragment extends Fragment {
     TextView tvNumLike;
     TextView tvNumComment;
     TextView tvTimestamp;
+    RecyclerView rvComments;
+    CommentsAdapter adapter;
+    List<Comment> comments;
+    LinearLayoutManager linearLayoutManager;
 
     public DetailFragment() {
     }
@@ -80,8 +97,9 @@ public class DetailFragment extends Fragment {
         ivShare = fragmentDetailBinding.ivShare;
         tvTimestamp = fragmentDetailBinding.tvTimeStamp;
         tvUsernameDescription = fragmentDetailBinding.tvUsernameDescription;
-        tvNumComment = fragmentDetailBinding.tvNumComment;
         tvNumLike = fragmentDetailBinding.tvNumLike;
+        rvComments = fragmentDetailBinding.rvComment;
+
 
         try {
             setUpViews();
@@ -89,6 +107,13 @@ public class DetailFragment extends Fragment {
             e.printStackTrace();
         }
 
+        comments = new ArrayList<>();
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        adapter = new CommentsAdapter(getActivity(), comments);
+        rvComments.setLayoutManager(linearLayoutManager);
+        rvComments.setAdapter(adapter);
+
+        queryComments();
     }
 
     private void setUpViews() throws ParseException {
@@ -139,5 +164,29 @@ public class DetailFragment extends Fragment {
         } else {
             tvNumLike.setText("" + numLike + " like");
         }
+    }
+
+    private void queryComments() {
+        Log.i(TAG, "Start querying for new comments");
+
+        // Set up query
+        ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
+        query.include(Post.KEY_USER);
+        query.addAscendingOrder("createdAt");
+        query.setLimit(100);
+
+        query.findInBackground(new FindCallback<Comment>() {
+            @Override
+            public void done(List<Comment> newComments, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error when querying new comments", e);
+                    return;
+                }
+                comments.addAll(newComments);
+                Log.e(TAG, String.valueOf(comments.size()));
+                adapter.notifyDataSetChanged();
+                Log.i(TAG, "Query completed, got " + newComments.size() + " comments");
+            }
+        });
     }
 }
