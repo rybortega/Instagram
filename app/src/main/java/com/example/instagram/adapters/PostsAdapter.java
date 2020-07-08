@@ -16,6 +16,7 @@ import com.example.instagram.activities.MainActivity;
 import com.example.instagram.databinding.ItemPostBinding;
 
 import com.example.instagram.fragments.DetailFragment;
+import com.example.instagram.fragments.ProfileFragment;
 import com.example.instagram.models.Post;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -112,11 +113,37 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     DetailFragment detailFragment = DetailFragment.newInstance(Parcels.wrap(posts.get(getAdapterPosition())));
                     MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, detailFragment).commit();
                 }
             });
+
+            ivProfileImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        goToProfile(getAdapterPosition());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            tvUsername.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        goToProfile(getAdapterPosition());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        private void goToProfile(int adapterPosition) throws ParseException {
+            ProfileFragment profileFragment = ProfileFragment.newInstance(Parcels.wrap(posts.get(adapterPosition).getUser().fetch()));
+            MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, profileFragment).commit();
         }
     }
 }
