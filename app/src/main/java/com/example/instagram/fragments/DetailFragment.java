@@ -19,7 +19,9 @@ import com.example.instagram.activities.MainActivity;
 import com.example.instagram.databinding.FragmentDetailBinding;
 import com.example.instagram.databinding.FragmentNewsfeedBinding;
 import com.example.instagram.models.Post;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
@@ -76,11 +78,15 @@ public class DetailFragment extends Fragment {
         ivSave = fragmentDetailBinding.ivSave;
         tvTimestamp = fragmentDetailBinding.tvTimeStamp;
 
-        setUpViews();
+        try {
+            setUpViews();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    private void setUpViews() {
+    private void setUpViews() throws ParseException {
         tvUsername.setText(post.getUser().getUsername());
         tvDescription.setText(post.getDescription());
         tvTimestamp.setText(post.getRelativeTime());
@@ -91,6 +97,28 @@ public class DetailFragment extends Fragment {
         ParseFile profileImg = post.getUser().getParseFile("profileImg");
         if (profileImg != null) {
             Glide.with(this).load(profileImg.getUrl().replaceAll("http", "https")).into(ivProfileImage);
+        }
+
+        updateLike();
+
+        ivLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    post.attemptToLike(ParseUser.getCurrentUser());
+                    updateLike();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void updateLike() throws ParseException {
+        if (post.userLiked(ParseUser.getCurrentUser())) {
+            ivLike.setImageResource(R.drawable.ufi_heart_active);
+        } else {
+            ivLike.setImageResource(R.drawable.ufi_heart);
         }
     }
 }

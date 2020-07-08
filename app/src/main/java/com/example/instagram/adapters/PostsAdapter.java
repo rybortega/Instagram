@@ -1,6 +1,7 @@
 package com.example.instagram.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Post post = posts.get(position);
-        holder.bind(post);
+        try {
+            holder.bind(post);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -97,7 +102,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvTimestamp = itemPostBinding.tvTimeStamp;
         }
 
-        public void bind(final Post post) {
+        public void bind(final Post post) throws ParseException {
             tvUsername.setText(post.getUser().getUsername());
             tvDescription.setText(post.getDescription());
             tvTimestamp.setText(post.getRelativeTime());
@@ -139,6 +144,24 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     }
                 }
             });
+
+            if (post.userLiked(ParseUser.getCurrentUser())) {
+                ivLike.setImageResource(R.drawable.ufi_heart_active);
+            } else {
+                ivLike.setImageResource(R.drawable.ufi_heart);
+            }
+
+            ivLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        post.attemptToLike(ParseUser.getCurrentUser());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    notifyItemChanged(getAdapterPosition());
+                }
+            });
         }
 
         private void goToProfile(int adapterPosition) throws ParseException {
@@ -146,4 +169,5 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, profileFragment).commit();
         }
     }
+
 }
