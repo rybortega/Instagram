@@ -98,7 +98,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivLike = itemPostBinding.ivLike;
             ivComment = itemPostBinding.ivComment;
             ivShare = itemPostBinding.ivShare;
-            ivSave = itemPostBinding.ivSave;
             tvTimestamp = itemPostBinding.tvTimeStamp;
         }
 

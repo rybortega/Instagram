@@ -45,54 +45,85 @@
             android:layout_marginEnd="10dp"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
-        <RelativeLayout
-            android:id="@+id/rlButtons"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ivImg"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp">
-
-
-            <ImageView
-                android:id="@+id/ivLike"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ufi_heart" />
-
-            <ImageView
-                android:id="@+id/ivComment"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="10dp"
-                android:layout_toRightOf="@id/ivLike"
-                android:src="@drawable/ufi_comment" />
-
-            <ImageView
-                android:id="@+id/ivShare"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="10dp"
-                android:layout_toRightOf="@id/ivComment"
-                android:src="@drawable/ufi_new_direct" />
-
-            <ImageView
-                android:id="@+id/ivSave"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="250dp"
-                android:layout_toRightOf="@id/ivShare"
-                android:src="@drawable/ufi_save" />
-        </RelativeLayout>
-
+    <RelativeLayout
+        android:id="@+id/rlInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivImg">
         <TextView
-            android:id="@+id/tvDescription"
+            android:id="@+id/tvNumLike"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/rlButtons"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
             android:textSize="18sp"
-            tools:text="This is my caption" />
+            tools:text="45 likes" />
+        <TextView
+            android:id="@+id/tvNumComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/tvNumLike"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:textSize="18sp"
+            tools:text="12 comments" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rlButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rlInfo"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp">
+
+
+        <ImageView
+            android:id="@+id/ivLike"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ufi_heart"/>
+
+        <ImageView
+            android:id="@+id/ivComment"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_toRightOf="@id/ivLike"
+            android:src="@drawable/ufi_comment" />
+
+        <ImageView
+            android:id="@+id/ivShare"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:layout_toRightOf="@id/ivComment"
+            android:src="@drawable/ufi_new_direct" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvUsernameDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlButtons"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="Hatruong99" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlButtons"
+        android:layout_toEndOf="@+id/tvUsernameDescription"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:textSize="18sp"
+        tools:text="This is my caption" />
 
 </RelativeLayout>

@@ -75,7 +75,6 @@ public class DetailFragment extends Fragment {
         ivLike = fragmentDetailBinding.ivLike;
         ivComment = fragmentDetailBinding.ivComment;
         ivShare = fragmentDetailBinding.ivShare;
-        ivSave = fragmentDetailBinding.ivSave;
         tvTimestamp = fragmentDetailBinding.tvTimeStamp;
 
         try {
