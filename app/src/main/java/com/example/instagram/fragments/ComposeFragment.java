@@ -102,6 +102,7 @@ public class ComposeFragment extends Fragment {
                 launchCamera();
             }
         });
+
         fabShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,8 +134,7 @@ public class ComposeFragment extends Fragment {
 
     private void launchLibrary() {
         try {
-            Intent intent = new Intent(Intent.ACTION_PICK,
-                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             intent.setType("image/*");
             photoFile = getPhotoFileUri(photoFileName);
             Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
@@ -212,13 +212,16 @@ public class ComposeFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
             case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
+                Log.e(TAG, "RIGHT REQUEST CODE");
                 if (resultCode == RESULT_OK) {
                     Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                     ivCamera.setImageBitmap(takenImage);
                 } else {
                     Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
                 }
+                break;
             case LOAD_IMAGE_ACTIVITY_REQUEST_CODE:
+                Log.e(TAG, "WRONG REQUEST CODE");
                 if (resultCode == RESULT_OK) {
                     Uri selectedImage = data.getData();
                     try {
@@ -231,6 +234,7 @@ public class ComposeFragment extends Fragment {
                 } else {
                     Toast.makeText(getContext(), "You haven't picked Image", Toast.LENGTH_LONG).show();
                 }
+                break;
             default:
                 Log.e(TAG, "Cannot identify activity result");
         }
