@@ -76,6 +76,7 @@ public class NewsfeedFragment extends Fragment {
 
         posts.clear();
         setUpSwipeContainer();
+        MainActivity.showProgressBar();
         queryPosts();
     }
 
@@ -110,7 +111,6 @@ public class NewsfeedFragment extends Fragment {
     }
 
     private void queryPosts() {
-        MainActivity.showProgressBar();
         Log.i(TAG, "Start querying for new post");
 
         // Set up query

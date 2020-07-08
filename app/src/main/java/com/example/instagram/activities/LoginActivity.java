@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.instagram.databinding.ActivityLoginBinding;
+import com.example.instagram.models.User;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -92,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void registerUser(String username, String password) {
         Log.e(TAG, "Attempt to register");
-        ParseUser user = new ParseUser();
+        ParseUser user = new User();
         user.setUsername(username);
         user.setPassword(password);
         user.signUpInBackground(new SignUpCallback() {

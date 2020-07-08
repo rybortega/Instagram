@@ -18,7 +18,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.instagram.R;
 import com.example.instagram.activities.MainActivity;
 
-import com.example.instagram.databinding.ItemGridBinding;
 import com.example.instagram.fragments.DetailFragment;
 import com.example.instagram.models.Post;
 import com.parse.ParseException;

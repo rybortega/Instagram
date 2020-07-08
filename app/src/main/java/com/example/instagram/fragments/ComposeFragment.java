@@ -11,6 +11,7 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,13 +22,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.instagram.R;
 import com.example.instagram.activities.MainActivity;
 import com.example.instagram.databinding.FragmentComposeBinding;
 import com.example.instagram.models.Post;
+import com.example.instagram.models.User;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import org.parceler.Parcels;
 
 import java.io.File;
 
@@ -44,21 +49,27 @@ public class ComposeFragment extends Fragment {
     private File photoFile;
     private EditText etDescription;
     private Button btShare;
+    private User user;
 
     private FragmentComposeBinding fragmentComposeBinding;
 
     public ComposeFragment() {
     }
 
-    public static ComposeFragment newInstance() {
+    public static ComposeFragment newInstance(Parcelable user) {
         ComposeFragment fragment = new ComposeFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(MainActivity.KEY_USER, user);
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if (getArguments() != null) {
+            user = Parcels.unwrap(getArguments().getParcelable(MainActivity.KEY_USER));
+        }
     }
 
     @Override
@@ -69,8 +80,16 @@ public class ComposeFragment extends Fragment {
         ivCamera = fragmentComposeBinding.ivCamera;
         etDescription = fragmentComposeBinding.etDescription;
         btShare = fragmentComposeBinding.btnShare;
-
         ivCamera = fragmentComposeBinding.ivCamera;
+
+        // Use camera to update avatar
+        if (user != null) {
+            btShare.setText("Update Avatar");
+        } else {
+            // Use camera to compose new post
+            btShare.setText("Share");
+        }
+
         ivCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,26 +102,30 @@ public class ComposeFragment extends Fragment {
             public void onClick(View view) {
                 MainActivity.showProgressBar();
                 String description = etDescription.getText().toString();
-                ParseUser user = ParseUser.getCurrentUser();
+                ParseUser currUser = ParseUser.getCurrentUser();
                 if (description.isEmpty()) {
                     Toast.makeText(getContext(), "You should include a description!", Toast.LENGTH_SHORT).show();
                 }
                 if (photoFile == null) {
                     Toast.makeText(getContext(), "You should include a photo!", Toast.LENGTH_SHORT).show();
                 }
-                savePost(description, user, photoFile);
+                if (user == null) {
+                    savePost(description, currUser, photoFile);
+                } else {
+                    updateAvatar(photoFile);
+                }
             }
         });
 
         return fragmentComposeBinding.getRoot();
     }
 
-    public void savePost(String description, ParseUser user, File photoFile) {
+    public void savePost(String description, ParseUser currUser, File photoFile) {
         Log.e(TAG, "SAVING");
         Post post = new Post();
         post.setImg(new ParseFile(photoFile));
         post.setDescription(description);
-        post.setUser(user);
+        post.setUser(currUser);
         post.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -112,12 +135,30 @@ public class ComposeFragment extends Fragment {
                 }
                 Log.e(TAG,"Done");
                 Toast.makeText(getContext(), "Image shared", Toast.LENGTH_SHORT).show();
-                etDescription.setText("");
-                ivCamera.setImageBitmap(null);
+                if (user == null) {
+                    goToNewsfeed();
+                } else {
+                    goToProfile();
+                }
                 MainActivity.hideProgressBar();
             }
         });
     }
+
+    private void goToProfile() {
+        ProfileFragment profileFragment = ProfileFragment.newInstance(Parcels.wrap(user));
+        MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, profileFragment).commit();
+    }
+
+    private void goToNewsfeed() {
+        NewsfeedFragment newsfeedFragment = new NewsfeedFragment();
+        MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, newsfeedFragment).commit();
+    }
+
+    public void updateAvatar(File photoFile) {
+        user.setProfileImg(new ParseFile(photoFile));
+    }
+
     public void launchCamera() {
         Log.e(TAG, "IN!");
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

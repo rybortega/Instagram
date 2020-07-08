@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar tbMenu;
     public static ProgressBar progressBar;
     public static FragmentManager fragmentManager;
+    public static ParseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +48,9 @@ public class MainActivity extends AppCompatActivity {
 
         setUpToolBar();
         setUpProgressBar();
+        fetchCurrUser();
 
         fragmentManager = getSupportFragmentManager();
-
-        ParseUser user = ParseUser.getCurrentUser();
-        try {
-            user = user.fetch();
-        } catch (ParseException e) {
-            Log.e(TAG, "Couldn't fetch current user");
-        }
 
         final Fragment composeFragment = new ComposeFragment();
         final Fragment newsfeedFragment = new NewsfeedFragment();
@@ -85,6 +80,15 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         bottomNavigation.setSelectedItemId(R.id.miHome);
+    }
+
+    public static void fetchCurrUser() {
+        user = ParseUser.getCurrentUser();
+        try {
+            user = user.fetch();
+        } catch (ParseException e) {
+            Log.e(TAG, "Couldn't fetch current user");
+        }
     }
 
     private void setUpToolBar() {

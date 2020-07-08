@@ -1,5 +1,6 @@
 package com.example.instagram.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,16 +16,20 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.instagram.R;
+import com.example.instagram.activities.LoginActivity;
 import com.example.instagram.activities.MainActivity;
 import com.example.instagram.adapters.PostGridAdapter;
 import com.example.instagram.adapters.PostsAdapter;
 import com.example.instagram.databinding.FragmentProfileBinding;
 import com.example.instagram.models.Post;
 import com.example.instagram.models.User;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.parse.FindCallback;
+import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
@@ -52,6 +57,7 @@ public class ProfileFragment extends Fragment {
     private List<Post> posts;
     private LinearLayoutManager linearLayoutManager;
     private PostGridAdapter adapter;
+    private FloatingActionButton fabLogOut;
 
     public ProfileFragment() {
     }
@@ -85,6 +91,7 @@ public class ProfileFragment extends Fragment {
         ivProfileImg = fragmentProfileBinding.ivProfileImg;
         tvUsername = fragmentProfileBinding.tvUsername;
         gvPosts = fragmentProfileBinding.gvPosts;
+        fabLogOut = fragmentProfileBinding.fabLogout;
 
         tvUsername.setText(user.getUsername());
 
@@ -95,11 +102,42 @@ public class ProfileFragment extends Fragment {
             Log.e(TAG, "CANNOT FIND IMAGE");
         }
 
+        ivProfileImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToCompose();
+            }
+        });
+
+        fabLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ParseUser.logOutInBackground(new LogOutCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            Log.i(TAG, String.valueOf(e));
+                            return;
+                        }
+                        Log.i(TAG, "Logged out!");
+                        Toast.makeText(getContext(), "Logged out successfully", Toast.LENGTH_SHORT).show();
+                        goLogIn();
+                    }
+                });
+            }
+        });
+
+
         posts = new ArrayList<>();
         linearLayoutManager = new LinearLayoutManager(getActivity());
         adapter = new PostGridAdapter(getActivity(), posts);
         gvPosts.setAdapter(adapter);
         queryPosts();
+    }
+
+    private void goToCompose() {
+        ComposeFragment composeFragment = ComposeFragment.newInstance(Parcels.wrap(user));
+        MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, composeFragment).commit();
     }
 
     private void queryPosts() {
@@ -126,5 +164,10 @@ public class ProfileFragment extends Fragment {
                 MainActivity.hideProgressBar();
             }
         });
+    }
+
+    private void goLogIn() {
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(intent);
     }
 }
