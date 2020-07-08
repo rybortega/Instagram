@@ -15,7 +15,6 @@ public class Comment extends ParseObject implements Parcelable {
     public final String KEY_CONTENT = "Content";
     public final String KEY_AUTHOR = "Author";
 
-
     public String getUser() throws ParseException {
         ParseUser user = getParseUser(KEY_AUTHOR);
         Log.e(TAG, user.getObjectId());

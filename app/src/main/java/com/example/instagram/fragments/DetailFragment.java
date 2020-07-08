@@ -172,6 +172,7 @@ public class DetailFragment extends Fragment {
         // Set up query
         ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
         query.include(Post.KEY_USER);
+        query.whereContains("post", post.getObjectId());
         query.addAscendingOrder("createdAt");
         query.setLimit(100);
 
