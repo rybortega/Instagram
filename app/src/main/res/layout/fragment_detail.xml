@@ -59,15 +59,6 @@
             android:layout_marginTop="5dp"
             android:textSize="18sp"
             tools:text="45 likes" />
-        <TextView
-            android:id="@+id/tvNumComment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/tvNumLike"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="5dp"
-            android:textSize="18sp"
-            tools:text="12 comments" />
     </RelativeLayout>
 
 

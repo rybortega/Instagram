@@ -24,6 +24,7 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
+import org.w3c.dom.Text;
 
 public class DetailFragment extends Fragment {
 
@@ -37,7 +38,9 @@ public class DetailFragment extends Fragment {
     ImageView ivLike;
     ImageView ivComment;
     ImageView ivShare;
-    ImageView ivSave;
+    TextView tvUsernameDescription;
+    TextView tvNumLike;
+    TextView tvNumComment;
     TextView tvTimestamp;
 
     public DetailFragment() {
@@ -76,6 +79,9 @@ public class DetailFragment extends Fragment {
         ivComment = fragmentDetailBinding.ivComment;
         ivShare = fragmentDetailBinding.ivShare;
         tvTimestamp = fragmentDetailBinding.tvTimeStamp;
+        tvUsernameDescription = fragmentDetailBinding.tvUsernameDescription;
+        tvNumComment = fragmentDetailBinding.tvNumComment;
+        tvNumLike = fragmentDetailBinding.tvNumLike;
 
         try {
             setUpViews();
@@ -89,6 +95,8 @@ public class DetailFragment extends Fragment {
         tvUsername.setText(post.getUser().getUsername());
         tvDescription.setText(post.getDescription());
         tvTimestamp.setText(post.getRelativeTime());
+        tvUsernameDescription.setText(post.getUser().getUsername());
+
         ParseFile image = post.getImg();
         if (image != null) {
             Glide.with(this).load(image.getUrl().replaceAll("http", "https")).into(ivImage);
@@ -99,18 +107,21 @@ public class DetailFragment extends Fragment {
         }
 
         updateLike();
-
         ivLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
                     post.attemptToLike(ParseUser.getCurrentUser());
                     updateLike();
+                    updateNumLike();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
         });
+
+        updateNumLike();
+
     }
 
     private void updateLike() throws ParseException {
@@ -118,6 +129,15 @@ public class DetailFragment extends Fragment {
             ivLike.setImageResource(R.drawable.ufi_heart_active);
         } else {
             ivLike.setImageResource(R.drawable.ufi_heart);
+        }
+    }
+
+    private void updateNumLike() throws ParseException {
+        int numLike = post.getNumLike();
+        if (numLike > 1) {
+            tvNumLike.setText("" + numLike + " likes");
+        } else {
+            tvNumLike.setText("" + numLike + " like");
         }
     }
 }
