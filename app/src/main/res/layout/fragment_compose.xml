@@ -40,4 +40,17 @@
         android:text="SHARE"
         android:textColor="@color/white" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/ic_baseline_arrow_upward_24"
+        android:contentDescription="Log Out"
+        android:backgroundTint="@color/instagramYellow"
+        app:borderWidth="0dp"
+        android:layout_margin="16dp" />
+
 </RelativeLayout>

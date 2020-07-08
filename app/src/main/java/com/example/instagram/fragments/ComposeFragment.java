@@ -27,6 +27,7 @@ import com.example.instagram.activities.MainActivity;
 import com.example.instagram.databinding.FragmentComposeBinding;
 import com.example.instagram.models.Post;
 import com.example.instagram.models.User;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -35,6 +36,8 @@ import com.parse.SaveCallback;
 import org.parceler.Parcels;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -43,6 +46,7 @@ public class ComposeFragment extends Fragment {
 
     public final String TAG = "ComposeFragment";
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    private static final int LOAD_IMAGE_ACTIVITY_REQUEST_CODE = 1512;
     public String photoFileName = "photo.jpg";
 
     public ImageView ivCamera;
@@ -50,6 +54,7 @@ public class ComposeFragment extends Fragment {
     private EditText etDescription;
     private Button btShare;
     private User user;
+    private FloatingActionButton fabShare;
 
     private FragmentComposeBinding fragmentComposeBinding;
 
@@ -81,6 +86,7 @@ public class ComposeFragment extends Fragment {
         etDescription = fragmentComposeBinding.etDescription;
         btShare = fragmentComposeBinding.btnShare;
         ivCamera = fragmentComposeBinding.ivCamera;
+        fabShare = fragmentComposeBinding.fabShare;
 
         // Use camera to update avatar
         if (user != null) {
@@ -96,7 +102,12 @@ public class ComposeFragment extends Fragment {
                 launchCamera();
             }
         });
-
+        fabShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchLibrary();
+            }
+        });
         btShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,6 +129,20 @@ public class ComposeFragment extends Fragment {
         });
 
         return fragmentComposeBinding.getRoot();
+    }
+
+    private void launchLibrary() {
+        try {
+            Intent intent = new Intent(Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setType("image/*");
+            photoFile = getPhotoFileUri(photoFileName);
+            Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+            startActivityForResult(intent, LOAD_IMAGE_ACTIVITY_REQUEST_CODE);
+        } catch (Exception e){
+            Log.i(TAG, "Error while opening library", e);
+        }
     }
 
     public void savePost(String description, ParseUser currUser, File photoFile) {
@@ -175,7 +200,7 @@ public class ComposeFragment extends Fragment {
         File mediaStorageDir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
 
         if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
-            Log.d(TAG, "failed to create directory");
+            Log.d(TAG, "Failed to create directory");
         }
 
         return new File(mediaStorageDir.getPath() + File.separator + fileName);
@@ -185,13 +210,29 @@ public class ComposeFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                ivCamera.setImageBitmap(takenImage);
-            } else { // Result was a failure
-                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
-            }
+        switch (requestCode){
+            case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                    ivCamera.setImageBitmap(takenImage);
+                } else {
+                    Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+                }
+            case LOAD_IMAGE_ACTIVITY_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    Uri selectedImage = data.getData();
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
+                        ivCamera.setImageBitmap(bitmap);
+                    } catch (IOException e) {
+                        Log.i("TAG", "Picture wasn't selected " + e);
+                    }
+                    break;
+                } else {
+                    Toast.makeText(getContext(), "You haven't picked Image", Toast.LENGTH_LONG).show();
+                }
+            default:
+                Log.e(TAG, "Cannot identify activity result");
         }
     }
 }
