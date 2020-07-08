@@ -12,8 +12,21 @@ import com.parse.ParseUser;
 public class Comment extends ParseObject implements Parcelable {
 
     private static final String TAG = "CommentModel";
+    private static final String KEY_POST = "post";
     public final String KEY_CONTENT = "Content";
     public final String KEY_AUTHOR = "Author";
+
+    public void setContent(String text) {
+        put(KEY_CONTENT, text);
+    }
+
+    public void setAuthor(ParseUser user) {
+        put(KEY_AUTHOR, user);
+    }
+
+    public void setPost(String objectId) {
+        put(KEY_POST, ParseObject.createWithoutData("Post", objectId) );
+    }
 
     public String getUser() throws ParseException {
         ParseUser user = getParseUser(KEY_AUTHOR);

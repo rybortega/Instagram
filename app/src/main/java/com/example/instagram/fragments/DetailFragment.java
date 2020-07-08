@@ -147,6 +147,13 @@ public class DetailFragment extends Fragment {
 
         updateNumLike();
 
+        ivComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToComment();
+            }
+        });
+
     }
 
     private void updateLike() throws ParseException {
@@ -173,8 +180,7 @@ public class DetailFragment extends Fragment {
         ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
         query.include(Post.KEY_USER);
         query.whereContains("post", post.getObjectId());
-        query.addAscendingOrder("createdAt");
-        query.setLimit(100);
+        query.addDescendingOrder("createdAt");
 
         query.findInBackground(new FindCallback<Comment>() {
             @Override
@@ -189,5 +195,10 @@ public class DetailFragment extends Fragment {
                 Log.i(TAG, "Query completed, got " + newComments.size() + " comments");
             }
         });
+    }
+
+    public void goToComment() {
+        CommentFragment commentFragment = CommentFragment.newInstance(Parcels.wrap(post));
+        MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, commentFragment).commit();
     }
 }

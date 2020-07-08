@@ -16,6 +16,7 @@ import com.example.instagram.R;
 import com.example.instagram.activities.MainActivity;
 import com.example.instagram.databinding.ItemPostBinding;
 
+import com.example.instagram.fragments.CommentFragment;
 import com.example.instagram.fragments.DetailFragment;
 import com.example.instagram.fragments.ProfileFragment;
 import com.example.instagram.models.Post;
@@ -164,11 +165,23 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     notifyItemChanged(getAdapterPosition());
                 }
             });
+
+            ivComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    goToComment(getAdapterPosition());
+                }
+            });
         }
 
         private void goToProfile(int adapterPosition) throws ParseException {
             ProfileFragment profileFragment = ProfileFragment.newInstance(Parcels.wrap(posts.get(adapterPosition).getUser().fetch()));
             MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, profileFragment).commit();
+        }
+
+        public void goToComment(int position) {
+            CommentFragment commentFragment = CommentFragment.newInstance(Parcels.wrap(posts.get(position)));
+            MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, commentFragment).commit();
         }
     }
 

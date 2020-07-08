@@ -1,8 +1,10 @@
 package com.example.instagram.models;
 
+import android.content.Context;
 import android.os.Parcelable;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.instagram.activities.MainActivity;
 import com.parse.FindCallback;
@@ -13,6 +15,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.parceler.Parcel;
 
@@ -92,5 +95,24 @@ public class Post extends ParseObject implements Parcelable {
             Log.i(TAG, "Liked!");
         }
         save();
+    }
+
+    public void postComment(String text, final Context context) {
+        Comment comment = new Comment();
+        comment.setContent(text);
+        comment.setAuthor(ParseUser.getCurrentUser());
+        comment.setPost(getObjectId());
+        comment.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error while saving comment", e);
+                    Toast.makeText(context, "Error while posting comment", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Log.e(TAG,"Done");
+                Toast.makeText(context, "Comment posted", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

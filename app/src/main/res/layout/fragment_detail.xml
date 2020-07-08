@@ -38,7 +38,7 @@
     <ImageView
         android:id="@+id/ivImg"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="200dp"
         android:layout_below="@+id/ivProfileImg"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
@@ -123,6 +123,6 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/tvDescription"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="0dp" />
 
 </RelativeLayout>
