@@ -41,8 +41,8 @@ The following **additional** features are implemented:
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
-1.
-2.
+1. How to create and deal with ParseRelation
+2. Assign for each user specific read-write permission
 
 ## Video Walkthrough
 
