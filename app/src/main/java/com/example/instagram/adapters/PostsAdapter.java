@@ -1,6 +1,7 @@
 package com.example.instagram.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.instagram.DoubleClickListener;
 import com.example.instagram.R;
 import com.example.instagram.activities.MainActivity;
 import com.example.instagram.databinding.ItemPostBinding;
@@ -120,6 +122,25 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 @Override
                 public void onClick(View view) {
                     goToDetail(getAdapterPosition());
+                }
+            });
+
+            ivImage.setOnClickListener(new DoubleClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    Log.e(TAG, "Single click");
+                    goToDetail(getAdapterPosition());
+                }
+
+                @Override
+                public void onDoubleClick(View v) {
+                    Log.e(TAG, "Double click");
+                    try {
+                        post.attemptToLike(ParseUser.getCurrentUser());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    notifyItemChanged(getAdapterPosition());
                 }
             });
 
