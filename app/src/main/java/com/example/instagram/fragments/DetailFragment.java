@@ -130,7 +130,7 @@ public class DetailFragment extends Fragment {
 
         ParseFile image = post.getImg();
         if (image != null) {
-            Glide.with(this).load(image.getUrl().replaceAll("http", "https")).into(ivImage);
+            Glide.with(this).load(image.getUrl().replaceAll("http", "https")).circleCrop().into(ivImage);
         }
         ParseFile profileImg = post.getUser().getParseFile("profileImg");
         if (profileImg != null) {

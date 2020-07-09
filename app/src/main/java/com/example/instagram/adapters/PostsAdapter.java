@@ -115,7 +115,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             }
             ParseFile profileImg = post.getUser().getParseFile("profileImg");
             if (profileImg != null) {
-                Glide.with(context).load(profileImg.getUrl().replaceAll("http", "https")).into(ivProfileImage);
+                Glide.with(context).load(profileImg.getUrl().replaceAll("http", "https")).circleCrop().into(ivProfileImage);
             }
 
             ivImage.setOnClickListener(new View.OnClickListener() {

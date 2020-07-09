@@ -87,11 +87,11 @@
 
         <ImageView
             android:id="@+id/ivShare"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginStart="10dp"
             android:layout_toRightOf="@id/ivComment"
-            android:src="@drawable/ufi_new_direct" />
+            android:src="@drawable/direct" />
 
     </RelativeLayout>
 

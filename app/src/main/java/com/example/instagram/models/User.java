@@ -11,6 +11,7 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +24,6 @@ public class User extends ParseUser implements Parcelable {
     public static String PROFILE_IMG_TAG = "profileImg";
     public static String USERNAME_TAG = "username";
 
-    public void setProfileImg(ParseFile file) {
-        put(PROFILE_IMG_TAG, file);
-    }
     public ParseFile getProfileImg() {
         Log.e(TAG, "TRIED TO GET IMG");
         return getParseFile(PROFILE_IMG_TAG);

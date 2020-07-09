@@ -121,7 +121,7 @@ public class ComposeFragment extends Fragment {
                 MainActivity.showProgressBar();
                 String description = etDescription.getText().toString();
                 ParseUser currUser = ParseUser.getCurrentUser();
-                if (description.isEmpty()) {
+                if (description.isEmpty() && user == null) {
                     Toast.makeText(getContext(), "You should include a description!", Toast.LENGTH_SHORT).show();
                 }
                 if (photoFile == null) {
@@ -130,7 +130,11 @@ public class ComposeFragment extends Fragment {
                 if (user == null) {
                     savePost(description, currUser, photoFile);
                 } else {
-                    updateAvatar(photoFile);
+                    try {
+                        updateAvatar(photoFile);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -183,8 +187,23 @@ public class ComposeFragment extends Fragment {
         MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, newsfeedFragment).commit();
     }
 
-    public void updateAvatar(File photoFile) {
-        user.setProfileImg(new ParseFile(photoFile));
+    public void updateAvatar(File photoFile) throws ParseException {
+        Log.e(TAG, "Start updating avatar");
+        user.put(User.PROFILE_IMG_TAG, new ParseFile(photoFile));
+        user.getCurrentUser().saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.e(TAG, "Saved image");
+                    Toast.makeText(getContext(), "Image shared", Toast.LENGTH_SHORT).show();
+                    goToProfile();
+                } else {
+                    Log.e(TAG, "Error", e);
+                    Toast.makeText(getContext(), "Error while saving", Toast.LENGTH_SHORT).show();
+                }
+                MainActivity.hideProgressBar();
+            }
+        });
     }
 
     public void launchCamera() {

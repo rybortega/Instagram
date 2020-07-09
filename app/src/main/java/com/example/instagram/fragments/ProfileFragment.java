@@ -97,7 +97,7 @@ public class ProfileFragment extends Fragment {
 
         ParseFile profileImg = user.getParseFile("profileImg");
         if (profileImg != null) {
-            Glide.with(getActivity()).load(profileImg.getUrl().replaceAll("http", "https")).into(ivProfileImg);
+            Glide.with(getActivity()).load(profileImg.getUrl().replaceAll("http", "https")).circleCrop().into(ivProfileImg);
         } else {
             Log.e(TAG, "CANNOT FIND IMAGE");
         }
