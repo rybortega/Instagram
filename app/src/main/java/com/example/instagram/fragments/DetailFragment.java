@@ -28,6 +28,7 @@ import com.example.instagram.databinding.FragmentDetailBinding;
 import com.example.instagram.databinding.FragmentNewsfeedBinding;
 import com.example.instagram.models.Comment;
 import com.example.instagram.models.Post;
+import com.example.instagram.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -64,6 +65,7 @@ public class DetailFragment extends Fragment {
     LinearLayoutManager linearLayoutManager;
     EditText etComment;
     Button btnComment;
+    User user;
 
     public DetailFragment() {
     }
@@ -106,6 +108,7 @@ public class DetailFragment extends Fragment {
         rvComments = fragmentDetailBinding.rvComment;
         etComment = fragmentDetailBinding.edComment;
         btnComment = fragmentDetailBinding.btnComment;
+        user = (User) ParseUser.getCurrentUser();
 
         try {
             setUpViews();
@@ -130,11 +133,11 @@ public class DetailFragment extends Fragment {
 
         ParseFile image = post.getImg();
         if (image != null) {
-            Glide.with(this).load(image.getUrl().replaceAll("http", "https")).circleCrop().into(ivImage);
+            Glide.with(this).load(image.getUrl().replaceAll("http", "https")).into(ivImage);
         }
         ParseFile profileImg = post.getUser().getParseFile("profileImg");
         if (profileImg != null) {
-            Glide.with(this).load(profileImg.getUrl().replaceAll("http", "https")).into(ivProfileImage);
+            Glide.with(this).load(profileImg.getUrl().replaceAll("http", "https")).circleCrop().into(ivProfileImage);
         }
 
         updateLike();
@@ -152,7 +155,6 @@ public class DetailFragment extends Fragment {
             }
         });
 
-
         ivComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -160,6 +162,18 @@ public class DetailFragment extends Fragment {
             }
         });
 
+        updateSaved();
+        ivShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    user.attemptToSave(post);
+                    updateSaved();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         ivProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -208,6 +222,14 @@ public class DetailFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void updateSaved() throws ParseException {
+        if (user.postSaved(post)) {
+            ivShare.setImageResource(R.drawable.nav_inbox_paper_plane);
+        } else {
+            ivShare.setImageResource(R.drawable.direct);
+        }
     }
 
     private void updateLike() throws ParseException {

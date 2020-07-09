@@ -20,8 +20,12 @@ import com.example.instagram.databinding.ItemPostBinding;
 import com.example.instagram.fragments.DetailFragment;
 import com.example.instagram.fragments.ProfileFragment;
 import com.example.instagram.models.Post;
+import com.example.instagram.models.User;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
@@ -88,6 +92,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         ImageView ivShare;
         TextView tvTimestamp;
         TextView tvUsernameDescription;
+        User user;
 
         public ViewHolder(@NonNull ItemPostBinding itemPostBinding) {
 
@@ -101,6 +106,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivShare = itemPostBinding.ivShare;
             tvTimestamp = itemPostBinding.tvTimeStamp;
             tvUsernameDescription = itemPostBinding.tvUsernameDescription;
+            user = (User) ParseUser.getCurrentUser();
         }
 
         public void bind(final Post post) throws ParseException {
@@ -190,10 +196,28 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     goToDetail(getAdapterPosition());
                 }
             });
+
+            if (user.postSaved(posts.get(getAdapterPosition()))) {
+                ivShare.setImageResource(R.drawable.nav_inbox_paper_plane);
+            } else {
+                ivShare.setImageResource(R.drawable.direct);
+            }
+
+            ivShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        user.attemptToSave(posts.get(getAdapterPosition()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    notifyItemChanged(getAdapterPosition());
+                }
+            });
         }
 
         private void goToDetail(int adapterPosition) {
-            DetailFragment detailFragment = DetailFragment.newInstance(Parcels.wrap(posts.get(getAdapterPosition())));
+            DetailFragment detailFragment = DetailFragment.newInstance(Parcels.wrap(posts.get(adapterPosition)));
             MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, detailFragment).commit();
         }
 
