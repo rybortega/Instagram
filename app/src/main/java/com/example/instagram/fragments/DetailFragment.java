@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.instagram.DoubleClickListener;
 import com.example.instagram.R;
 import com.example.instagram.activities.MainActivity;
 import com.example.instagram.adapters.CommentsAdapter;
@@ -137,6 +138,7 @@ public class DetailFragment extends Fragment {
         }
 
         updateLike();
+        updateNumLike();
         ivLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,7 +152,6 @@ public class DetailFragment extends Fragment {
             }
         });
 
-        updateNumLike();
 
         ivComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,6 +189,23 @@ public class DetailFragment extends Fragment {
                 post.postComment(comment, getActivity());
                 etComment.setText("");
                 queryComments();
+            }
+        });
+
+        ivImage.setOnClickListener(new DoubleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
+            }
+
+            @Override
+            public void onDoubleClick(View v) {
+                try {
+                    post.attemptToLike(ParseUser.getCurrentUser());
+                    updateLike();
+                    updateNumLike();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
