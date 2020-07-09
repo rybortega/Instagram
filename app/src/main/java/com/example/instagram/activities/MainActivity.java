@@ -39,10 +39,11 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigation;
     private ActivityMainBinding activityMainBinding;
     private Toolbar tbMenu;
+     ImageView ivArchive;
+
     public static ProgressBar progressBar;
     public static FragmentManager fragmentManager;
     public static ParseUser user;
-    public ImageView ivArchive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         setUpToolBar();
         setUpProgressBar();
-        fetchCurrUser();
+        fetchCurrentUser();
 
         fragmentManager = getSupportFragmentManager();
 
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation.setSelectedItemId(R.id.miHome);
     }
 
-    public static void fetchCurrUser() {
+    public static void fetchCurrentUser() {
         user = ParseUser.getCurrentUser();
         try {
             user = user.fetch();
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Allow user to go to Archive fragment when Archive icon is clicked
     private void setUpToolBar() {
         ivArchive = activityMainBinding.ivArchive;
         ivArchive.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
     public void setUpProgressBar() {
         progressBar = activityMainBinding.progressBar;
     }
+
     public static void showProgressBar() {
         progressBar.setVisibility(ProgressBar.VISIBLE);
     }

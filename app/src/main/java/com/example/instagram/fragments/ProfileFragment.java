@@ -6,8 +6,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Parcelable;
 import android.util.Log;
@@ -24,7 +22,6 @@ import com.example.instagram.R;
 import com.example.instagram.activities.LoginActivity;
 import com.example.instagram.activities.MainActivity;
 import com.example.instagram.adapters.PostGridAdapter;
-import com.example.instagram.adapters.PostsAdapter;
 import com.example.instagram.databinding.FragmentProfileBinding;
 import com.example.instagram.models.Post;
 import com.example.instagram.models.User;
@@ -102,6 +99,7 @@ public class ProfileFragment extends Fragment {
             Log.e(TAG, "CANNOT FIND IMAGE");
         }
 
+        // Allow user to update avatar by clicking on current profile picture
         ivProfileImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,13 +125,13 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-
         posts = new ArrayList<>();
         adapter = new PostGridAdapter(getActivity(), posts);
         gvPosts.setAdapter(adapter);
         queryPosts();
     }
 
+    // Go to compose & send information of current user to update avatar (instead of composing post)
     private void goToCompose() {
         ComposeFragment composeFragment = ComposeFragment.newInstance(Parcels.wrap(user));
         MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, composeFragment).commit();

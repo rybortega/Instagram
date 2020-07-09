@@ -51,15 +51,14 @@ public class ComposeFragment extends Fragment {
     public final String TAG = "ComposeFragment";
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     private static final int LOAD_IMAGE_ACTIVITY_REQUEST_CODE = 1512;
-    public String photoFileName = "photo.jpg";
 
-    public ImageView ivCamera;
+    private String photoFileName = "photo.jpg";
+    private ImageView ivCamera;
     private File photoFile;
     private EditText etDescription;
     private Button btShare;
     private User user;
     private FloatingActionButton fabShare;
-
     private FragmentComposeBinding fragmentComposeBinding;
 
     public ComposeFragment() {
@@ -85,7 +84,6 @@ public class ComposeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         fragmentComposeBinding = FragmentComposeBinding.inflate(inflater, container, false);
-
         ivCamera = fragmentComposeBinding.ivCamera;
         etDescription = fragmentComposeBinding.etDescription;
         btShare = fragmentComposeBinding.btnShare;
@@ -102,6 +100,7 @@ public class ComposeFragment extends Fragment {
             btShare.setText("Share");
         }
 
+        // Launch camera when camera icon is clicked
         ivCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,24 +108,29 @@ public class ComposeFragment extends Fragment {
             }
         });
 
+        // Launch library when library icon is clicked
         fabShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 launchLibrary();
             }
         });
+
+        // Start uploading selected/captured image
         btShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity.showProgressBar();
                 String description = etDescription.getText().toString();
                 ParseUser currUser = ParseUser.getCurrentUser();
                 if (description.isEmpty() && user == null) {
                     Toast.makeText(getContext(), "You should include a description!", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 if (photoFile == null) {
                     Toast.makeText(getContext(), "You should include a photo!", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+                MainActivity.showProgressBar(); // Progress bar will be hidden by savePost or updateAvatar
                 if (user == null) {
                     savePost(description, currUser, photoFile);
                 } else {
@@ -145,19 +149,32 @@ public class ComposeFragment extends Fragment {
     private void launchLibrary() {
         try {
             Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            intent.setType("image/*");
+            intent.setType("image/*"); // Only accept image types
             startActivityForResult(intent, LOAD_IMAGE_ACTIVITY_REQUEST_CODE);
         } catch (Exception e){
             Log.i(TAG, "Error while opening library", e);
         }
     }
 
+    public void launchCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+
+        intent.resolveActivity(getContext().getPackageManager());
+        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+    }
+
     public void savePost(String description, ParseUser currUser, File photoFile) {
+        MainActivity.showProgressBar();
         Log.e(TAG, "Saving selected file");
+
         Post post = new Post();
         post.setImg(new ParseFile(photoFile));
         post.setDescription(description);
         post.setUser(currUser);
+
         post.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -167,28 +184,16 @@ public class ComposeFragment extends Fragment {
                 }
                 Log.e(TAG,"Done");
                 Toast.makeText(getContext(), "Image shared", Toast.LENGTH_SHORT).show();
-                if (user == null) {
-                    goToNewsfeed();
-                } else {
-                    goToProfile();
-                }
+                goToNewsfeed();
                 MainActivity.hideProgressBar();
             }
         });
     }
 
-    private void goToProfile() {
-        ProfileFragment profileFragment = ProfileFragment.newInstance(Parcels.wrap(user));
-        MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, profileFragment).commit();
-    }
-
-    private void goToNewsfeed() {
-        NewsfeedFragment newsfeedFragment = new NewsfeedFragment();
-        MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, newsfeedFragment).commit();
-    }
-
     public void updateAvatar(File photoFile) throws ParseException {
+        MainActivity.showProgressBar();
         Log.e(TAG, "Start updating avatar");
+
         user.put(User.PROFILE_IMG_TAG, new ParseFile(photoFile));
         user.getCurrentUser().saveInBackground(new SaveCallback() {
             @Override
@@ -206,14 +211,14 @@ public class ComposeFragment extends Fragment {
         });
     }
 
-    public void launchCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    private void goToProfile() {
+        ProfileFragment profileFragment = ProfileFragment.newInstance(Parcels.wrap(user));
+        MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, profileFragment).commit();
+    }
 
-        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
-
-        intent.resolveActivity(getContext().getPackageManager());
-        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+    private void goToNewsfeed() {
+        NewsfeedFragment newsfeedFragment = new NewsfeedFragment();
+        MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, newsfeedFragment).commit();
     }
 
     public File getPhotoFileUri(String fileName) {
@@ -224,13 +229,13 @@ public class ComposeFragment extends Fragment {
         }
 
         return new File(mediaStorageDir.getPath() + File.separator + fileName);
-
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
+        switch (requestCode) {
+            // If user chose to capture new image
             case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
@@ -239,6 +244,7 @@ public class ComposeFragment extends Fragment {
                     Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            // If user chose to upload existing image
             case LOAD_IMAGE_ACTIVITY_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     Uri selectedImage = data.getData();

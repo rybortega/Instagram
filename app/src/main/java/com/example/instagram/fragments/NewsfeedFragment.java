@@ -13,14 +13,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.instagram.EndlessRecyclerViewScrollListener;
-import com.example.instagram.R;
 import com.example.instagram.activities.MainActivity;
 import com.example.instagram.adapters.PostsAdapter;
 import com.example.instagram.databinding.FragmentNewsfeedBinding;
-import com.example.instagram.databinding.ItemPostBinding;
 import com.example.instagram.models.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;

@@ -140,6 +140,7 @@ public class DetailFragment extends Fragment {
             Glide.with(this).load(profileImg.getUrl().replaceAll("http", "https")).circleCrop().into(ivProfileImage);
         }
 
+        // Set up like-related views
         updateLike();
         updateNumLike();
         ivLike.setOnClickListener(new View.OnClickListener() {
@@ -155,6 +156,7 @@ public class DetailFragment extends Fragment {
             }
         });
 
+        // Allow user to comment via comment button
         ivComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -162,6 +164,7 @@ public class DetailFragment extends Fragment {
             }
         });
 
+        // Update save-related views
         updateSaved();
         ivShare.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,6 +177,8 @@ public class DetailFragment extends Fragment {
                 }
             }
         });
+
+        // Profile image leads to profile fragment
         ivProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -185,6 +190,7 @@ public class DetailFragment extends Fragment {
             }
         });
 
+        // Username leads to profile fragment
         tvUsername.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -196,6 +202,7 @@ public class DetailFragment extends Fragment {
             }
         });
 
+        // Post input comment when comment button is clicked
         btnComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -206,6 +213,7 @@ public class DetailFragment extends Fragment {
             }
         });
 
+        // Allow user to like with double click
         ivImage.setOnClickListener(new DoubleClickListener() {
             @Override
             public void onSingleClick(View v) {

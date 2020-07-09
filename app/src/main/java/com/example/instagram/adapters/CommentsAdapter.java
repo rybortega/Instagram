@@ -31,10 +31,6 @@ import java.util.List;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
 
-    public interface OnClickListener {
-        void onClickListener(int position);
-    }
-
     private final String TAG = "CommentsAdapter";
     private Context context;
     private List<Comment> comments;

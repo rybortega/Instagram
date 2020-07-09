@@ -135,12 +135,11 @@ public class ArchiveFragment extends Fragment {
                     Log.e(TAG, "Error when querying new posts");
                     return;
                 }
-                Log.e(TAG, lastPost.toString());
+                // Update last post time to set condition for next query
                 if (newPosts.size() > 0) {
                     lastPost = newPosts.get(newPosts.size() - 1).getCreatedAt();
                 }
                 posts.addAll(newPosts);
-                Log.e(TAG, String.valueOf(posts.size()));
                 adapter.notifyDataSetChanged();
                 swipeContainer.setRefreshing(false);
                 Log.i(TAG, "Query completed, got " + newPosts.size() + " new posts");

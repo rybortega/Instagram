@@ -47,7 +47,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 email = etUsername.getText().toString();
                 password = etPassword.getText().toString();
-
                 if (email == null || password == null || email.length() == 0 || password.length() == 0) {
                     Toast.makeText(getApplicationContext(), "Email and password cannot be empty", Toast.LENGTH_SHORT).show();
                     return;
@@ -61,7 +60,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 email = etUsername.getText().toString();
                 password = etPassword.getText().toString();
-
                 if (email == null || password == null || email.length() == 0 || password.length() == 0) {
                     Toast.makeText(getApplicationContext(), "Email and password cannot be empty", Toast.LENGTH_SHORT).show();
                     return;

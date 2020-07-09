@@ -23,7 +23,6 @@ public class User extends ParseUser implements Parcelable {
     public final String TAG = "UserModel";
 
     public static String PROFILE_IMG_TAG = "profileImg";
-    public static String USERNAME_TAG = "username";
     public static String SAVED_TAG = "savedPosts";
 
     public boolean postSaved(ParseObject post) throws ParseException {
@@ -43,33 +42,5 @@ public class User extends ParseUser implements Parcelable {
             Log.i(TAG, "Unsaved!");
         }
         save();
-    }
-
-    public ParseFile getProfileImg() {
-        Log.e(TAG, "TRIED TO GET IMG");
-        return getParseFile(PROFILE_IMG_TAG);
-    }
-
-    public List<Post> getPosts() {
-        final List<Post> posts = new ArrayList<>();
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        query.addDescendingOrder("createdAt");
-        query.whereContains("user", getObjectId());
-
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> newPosts, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error when querying new posts");
-                    return;
-                }
-                posts.addAll(newPosts);
-                Log.i(TAG, "Query on user " + getUsername() + " completed, got " + newPosts.size() + " new posts");
-                MainActivity.hideProgressBar();
-            }
-        });
-
-        return posts;
     }
 }

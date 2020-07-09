@@ -34,9 +34,7 @@ public class Post extends ParseObject implements Parcelable {
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_IMAGE = "image";
     public static final String KEY_USER = "user";
-    public static final String KEY_TIME = "createdAt";
     public static final String KEY_LIKE = "likedBy";
-    public static final String KEY_COMMENT = "Comment";
 
     public String getDescription() {
         return getString(KEY_DESCRIPTION);
