@@ -110,6 +110,7 @@ public class ArchiveFragment extends Fragment {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 Log.e(TAG, "load more");
+                MainActivity.showProgressBar();
                 queryPosts();
                 swipeContainer.setRefreshing(false);
 
