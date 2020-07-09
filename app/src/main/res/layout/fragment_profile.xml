@@ -6,47 +6,46 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/ivProfileImg"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        tools:srcCompat="@tools:sample/avatars" />
+            android:id="@+id/ivProfileImg"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            tools:srcCompat="@tools:sample/avatars" />
 
-    <TextView
-        android:id="@+id/tvUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="40dp"
-        android:layout_toEndOf="@+id/ivProfileImg"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        tools:text="hatruong99" />
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="40dp"
+            android:layout_toEndOf="@+id/ivProfileImg"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="hatruong99" />
 
-    <GridView
-        android:id="@+id/gvPosts"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/ivProfileImg"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="@color/white"
-        android:horizontalSpacing="5dp"
-        android:gravity="center"
-        android:stretchMode="columnWidth"
-        android:numColumns="3"
-        android:verticalSpacing="5dp" />
+        <GridView
+            android:id="@+id/gvPosts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/ivProfileImg"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/white"
+            android:horizontalSpacing="5dp"
+            android:gravity="center"
+            android:stretchMode="columnWidth"
+            android:numColumns="3"
+            android:verticalSpacing="5dp" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabLogout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="end|bottom"
-        android:src="@drawable/ic_baseline_exit_to_app_24"
-        android:contentDescription="Log Out"
-        android:layout_margin="16dp" />
-
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="end|bottom"
+            android:src="@drawable/ic_baseline_exit_to_app_24"
+            android:contentDescription="Log Out"
+            android:layout_margin="16dp" />
 </RelativeLayout>

@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Parcelable;
 import android.util.Log;
@@ -55,7 +56,6 @@ public class ProfileFragment extends Fragment {
     private TextView tvUsername;
     private GridView gvPosts;
     private List<Post> posts;
-    private LinearLayoutManager linearLayoutManager;
     private PostGridAdapter adapter;
     private FloatingActionButton fabLogOut;
 
@@ -129,7 +129,6 @@ public class ProfileFragment extends Fragment {
 
 
         posts = new ArrayList<>();
-        linearLayoutManager = new LinearLayoutManager(getActivity());
         adapter = new PostGridAdapter(getActivity(), posts);
         gvPosts.setAdapter(adapter);
         queryPosts();
