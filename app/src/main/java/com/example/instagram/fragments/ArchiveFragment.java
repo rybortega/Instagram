@@ -19,32 +19,38 @@ import com.example.instagram.EndlessRecyclerViewScrollListener;
 import com.example.instagram.R;
 import com.example.instagram.activities.MainActivity;
 import com.example.instagram.adapters.PostsAdapter;
+import com.example.instagram.databinding.FragmentArchiveBinding;
 import com.example.instagram.databinding.FragmentNewsfeedBinding;
 import com.example.instagram.databinding.ItemPostBinding;
 import com.example.instagram.models.Post;
+import com.example.instagram.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class NewsfeedFragment extends Fragment {
+public class ArchiveFragment extends Fragment {
 
     private final int QUERY_LIMIT = 20;
-    private static final String TAG = "NewsfeedFragment";
+    private static final String TAG = "ArchiveFragment";
 
     private List<Post> posts;
     private PostsAdapter adapter;
     private RecyclerView rvPosts;
     private SwipeRefreshLayout swipeContainer;
-    private FragmentNewsfeedBinding fragmentNewsfeedBinding;
+    private FragmentArchiveBinding fragmentArchiveBinding;
     private EndlessRecyclerViewScrollListener scrollListener;
     private LinearLayoutManager linearLayoutManager;
     private Date lastPost;
+    private User user;
 
-    public NewsfeedFragment() {
+    public ArchiveFragment() {
     }
 
     @Override
@@ -55,21 +61,22 @@ public class NewsfeedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        fragmentNewsfeedBinding = FragmentNewsfeedBinding.inflate(inflater, container, false);
-        return fragmentNewsfeedBinding.getRoot();
+        fragmentArchiveBinding = FragmentArchiveBinding.inflate(inflater, container, false);
+        return fragmentArchiveBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        rvPosts = fragmentNewsfeedBinding.rvPosts;
+        rvPosts = fragmentArchiveBinding.rvPosts;
         posts = new ArrayList<>();
         linearLayoutManager = new LinearLayoutManager(getActivity());
         adapter = new PostsAdapter(getActivity(), posts);
         lastPost = new Date();
         rvPosts.setLayoutManager(linearLayoutManager);
         rvPosts.setAdapter(adapter);
+        user = (User) ParseUser.getCurrentUser();
 
         setUpScrollListener();
         rvPosts.addOnScrollListener(scrollListener);
@@ -81,7 +88,7 @@ public class NewsfeedFragment extends Fragment {
     }
 
     private void setUpSwipeContainer() {
-        swipeContainer = fragmentNewsfeedBinding.swipeContainer;
+        swipeContainer = fragmentArchiveBinding.swipeContainer;
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -114,8 +121,8 @@ public class NewsfeedFragment extends Fragment {
         Log.i(TAG, "Start querying for new post");
 
         // Set up query
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
+        ParseRelation<ParseObject> savedPosts = user.getRelation(User.SAVED_TAG);
+        ParseQuery query = savedPosts.getQuery();
         query.addDescendingOrder("createdAt");
         query.whereLessThan("createdAt", lastPost);
         query.setLimit(QUERY_LIMIT);

@@ -38,7 +38,7 @@
                 android:title="Logo" />
 
             <ImageView
-                android:id="@+id/ivDirect"
+                android:id="@+id/ivArchive"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_centerVertical="true"

@@ -5,7 +5,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -17,6 +19,7 @@ import androidx.fragment.app.FragmentManager;
 import com.example.instagram.R;
 import com.example.instagram.databinding.ActivityMainBinding;
 import com.example.instagram.databinding.FragmentProfileBinding;
+import com.example.instagram.fragments.ArchiveFragment;
 import com.example.instagram.fragments.ComposeFragment;
 import com.example.instagram.fragments.NewsfeedFragment;
 import com.example.instagram.fragments.ProfileFragment;
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     public static ProgressBar progressBar;
     public static FragmentManager fragmentManager;
     public static ParseUser user;
+    public ImageView ivArchive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +95,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpToolBar() {
-        tbMenu = activityMainBinding.tbMenu;
+        ivArchive = activityMainBinding.ivArchive;
+        ivArchive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Fragment archiveFragment = new ArchiveFragment();
+                fragmentManager.beginTransaction().replace(R.id.flContainer, archiveFragment).commit();
+            }
+        });
     }
+
     public void setUpProgressBar() {
         progressBar = activityMainBinding.progressBar;
     }

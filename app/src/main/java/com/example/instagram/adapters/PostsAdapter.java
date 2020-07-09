@@ -110,7 +110,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         }
 
         public void bind(final Post post) throws ParseException {
-            tvUsername.setText(post.getUser().getUsername());
+            tvUsername.setText(post.getUser().fetchIfNeeded().getUsername());
             tvDescription.setText(post.getDescription());
             tvTimestamp.setText(post.getRelativeTime());
             tvUsernameDescription.setText(post.getUser().getUsername());
