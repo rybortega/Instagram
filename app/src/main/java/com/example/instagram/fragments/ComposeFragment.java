@@ -35,9 +35,13 @@ import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -88,6 +92,8 @@ public class ComposeFragment extends Fragment {
         ivCamera = fragmentComposeBinding.ivCamera;
         fabShare = fragmentComposeBinding.fabShare;
 
+        photoFile = getPhotoFileUri(photoFileName);
+
         // Use camera to update avatar
         if (user != null) {
             btShare.setText("Update Avatar");
@@ -136,9 +142,6 @@ public class ComposeFragment extends Fragment {
         try {
             Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             intent.setType("image/*");
-            photoFile = getPhotoFileUri(photoFileName);
-            Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
             startActivityForResult(intent, LOAD_IMAGE_ACTIVITY_REQUEST_CODE);
         } catch (Exception e){
             Log.i(TAG, "Error while opening library", e);
@@ -146,7 +149,7 @@ public class ComposeFragment extends Fragment {
     }
 
     public void savePost(String description, ParseUser currUser, File photoFile) {
-        Log.e(TAG, "SAVING");
+        Log.e(TAG, "Saving selected file");
         Post post = new Post();
         post.setImg(new ParseFile(photoFile));
         post.setDescription(description);
@@ -185,9 +188,7 @@ public class ComposeFragment extends Fragment {
     }
 
     public void launchCamera() {
-        Log.e(TAG, "IN!");
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        photoFile = getPhotoFileUri(photoFileName);
 
         Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
@@ -212,7 +213,6 @@ public class ComposeFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
             case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
-                Log.e(TAG, "RIGHT REQUEST CODE");
                 if (resultCode == RESULT_OK) {
                     Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                     ivCamera.setImageBitmap(takenImage);
@@ -221,11 +221,14 @@ public class ComposeFragment extends Fragment {
                 }
                 break;
             case LOAD_IMAGE_ACTIVITY_REQUEST_CODE:
-                Log.e(TAG, "WRONG REQUEST CODE");
                 if (resultCode == RESULT_OK) {
                     Uri selectedImage = data.getData();
                     try {
+                        // Compress & save selected to photoFile (used for loading)
+                        OutputStream os = new BufferedOutputStream(new FileOutputStream(photoFile));
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 1, os);
+                        os.close();
                         ivCamera.setImageBitmap(bitmap);
                     } catch (IOException e) {
                         Log.i("TAG", "Picture wasn't selected " + e);

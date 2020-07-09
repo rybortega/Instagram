@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -59,6 +61,8 @@ public class DetailFragment extends Fragment {
     CommentsAdapter adapter;
     List<Comment> comments;
     LinearLayoutManager linearLayoutManager;
+    EditText etComment;
+    Button btnComment;
 
     public DetailFragment() {
     }
@@ -99,7 +103,8 @@ public class DetailFragment extends Fragment {
         tvUsernameDescription = fragmentDetailBinding.tvUsernameDescription;
         tvNumLike = fragmentDetailBinding.tvNumLike;
         rvComments = fragmentDetailBinding.rvComment;
-
+        etComment = fragmentDetailBinding.edComment;
+        btnComment = fragmentDetailBinding.btnComment;
 
         try {
             setUpViews();
@@ -150,7 +155,7 @@ public class DetailFragment extends Fragment {
         ivComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToComment();
+                etComment.requestFocus();
             }
         });
 
@@ -173,6 +178,16 @@ public class DetailFragment extends Fragment {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        btnComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String comment = etComment.getText().toString();
+                post.postComment(comment, getActivity());
+                etComment.setText("");
+                queryComments();
             }
         });
     }
@@ -210,17 +225,13 @@ public class DetailFragment extends Fragment {
                     Log.e(TAG, "Error when querying new comments", e);
                     return;
                 }
+                comments.clear();
                 comments.addAll(newComments);
                 Log.e(TAG, String.valueOf(comments.size()));
                 adapter.notifyDataSetChanged();
                 Log.i(TAG, "Query completed, got " + newComments.size() + " comments");
             }
         });
-    }
-
-    public void goToComment() {
-        CommentFragment commentFragment = CommentFragment.newInstance(Parcels.wrap(post));
-        MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, commentFragment).commit();
     }
 
     private void goToProfile() throws ParseException {

@@ -45,7 +45,6 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 email = etUsername.getText().toString();
                 password = etPassword.getText().toString();
 
@@ -53,7 +52,6 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Email and password cannot be empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 loginUser(email, password);
             }
         });
@@ -68,7 +66,6 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Email and password cannot be empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 registerUser(email, password);
             }
         });

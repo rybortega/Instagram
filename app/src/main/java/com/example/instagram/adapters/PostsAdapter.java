@@ -1,7 +1,6 @@
 package com.example.instagram.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import com.example.instagram.R;
 import com.example.instagram.activities.MainActivity;
 import com.example.instagram.databinding.ItemPostBinding;
 
-import com.example.instagram.fragments.CommentFragment;
 import com.example.instagram.fragments.DetailFragment;
 import com.example.instagram.fragments.ProfileFragment;
 import com.example.instagram.models.Post;
@@ -121,8 +119,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DetailFragment detailFragment = DetailFragment.newInstance(Parcels.wrap(posts.get(getAdapterPosition())));
-                    MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, detailFragment).commit();
+                    goToDetail(getAdapterPosition());
                 }
             });
 
@@ -169,19 +166,19 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivComment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    goToComment(getAdapterPosition());
+                    goToDetail(getAdapterPosition());
                 }
             });
+        }
+
+        private void goToDetail(int adapterPosition) {
+            DetailFragment detailFragment = DetailFragment.newInstance(Parcels.wrap(posts.get(getAdapterPosition())));
+            MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, detailFragment).commit();
         }
 
         private void goToProfile(int adapterPosition) throws ParseException {
             ProfileFragment profileFragment = ProfileFragment.newInstance(Parcels.wrap(posts.get(adapterPosition).getUser().fetch()));
             MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, profileFragment).commit();
-        }
-
-        public void goToComment(int position) {
-            CommentFragment commentFragment = CommentFragment.newInstance(Parcels.wrap(posts.get(position)));
-            MainActivity.fragmentManager.beginTransaction().replace(R.id.flContainer, commentFragment).commit();
         }
     }
 

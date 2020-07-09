@@ -119,10 +119,32 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvComment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="377dp"
+        android:layout_height="130dp"
         android:layout_below="@+id/tvDescription"
         android:layout_marginStart="15dp"
         android:layout_marginTop="0dp" />
+
+    <EditText
+        android:id="@+id/edComment"
+        android:layout_width="291dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rvComment"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="0dp"
+        android:hint="Comment here" />
+
+    <Button
+        android:id="@+id/btnComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rvComment"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_toRightOf="@+id/edComment"
+        android:backgroundTint="@color/instagramPink"
+        android:text="Comment"
+        android:textColor="@color/white" />
 
 </RelativeLayout>
